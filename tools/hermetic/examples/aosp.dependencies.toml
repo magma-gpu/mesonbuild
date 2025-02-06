@@ -1,0 +1,87 @@
+# Copyright 2025 The Meson Development Team
+# SPDX-License-Identifier: Apache-2.0
+
+[shared_libraries]
+libdrm = [
+    { target_name = "libdrm" }
+]
+libzstd = [
+    { target_name = "libzstd" }
+]
+hardware = [
+    { target_name = "libhardware" }
+]
+cutils = [
+    { target_name = "libcutils" }
+]
+log = [
+    { target_name = "liblog" }
+]
+nativewindow = [
+    { target_name = "libnativewindow" }
+]
+libclc = [
+    { target_name = "libclc_aosp_mesa", pkgconfig = {'libexecdir' = 'external/mesa3d/llvm-fake/clc-dir'}}
+]
+android_utils = [
+    { target_name = "libutils" }
+]
+
+[static_libraries]
+llvm = [
+    { target_name = "libLLVM16_swiftshader", version = "16.0", configtool = { "has-rtti" = "YES", "libdir" = "/tmp/" } }
+]
+sync = [
+    { target_name = "libsync" }
+]
+rustix = [
+    { target_name = "librustix" }
+]
+cfg_if = [
+    { target_name = "libcfg_if" }
+]
+log_rust = [
+    { target_name = "liblog_rust" }
+]
+thiserror = [
+    { target_name = "libthiserror" }
+]
+zerocopy = [
+    { target_name = "libzerocopy" }
+]
+aemu_ringbuffer = [
+    { target_name = "libringbuffer" }
+]
+qemupipe = [
+    { target_name = "libqemupipe.ranchu" }
+]
+renderControlEncoder = [
+    { target_name = "libgfxstream_rcEnc_static" }
+]
+androidemu_guest = [
+    { target_name = "libgfxstream_androidemu_static" }
+]
+arect = [
+    { target_name = "libarect" }
+]
+
+[header_libraries]
+hardware = [
+    { target_name = "hwvulkan_headers" }
+]
+goldfish_gralloc_headers = [
+    { target_name = "libgralloc_cb.ranchu" } 
+]
+minigbm_headers = [
+    { target_name = "minigbm_headers" } 
+]
+nativebase_headers = [
+    { target_name = "libnativebase_headers" } 
+]
+
+[programs]
+python3 =  { version = "3.9", dependencies = ["mako"] }
+glslangValidator = { version = "Glslang Version: 12:44.4.0", path = "//external/deqp-deps/glslang:glslangValidator" }
+bindgen = { version = "1.71" }
+bison = { version = "3.8.2" }
+flex = { version = "2.6.4" }

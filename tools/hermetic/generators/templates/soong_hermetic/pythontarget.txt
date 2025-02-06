@@ -1,0 +1,21 @@
+{# Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+#}
+python_binary_host {
+    name: "{{ target.name }}",
+    main: "{{ target.main }}",
+{%- if target.srcs %}
+    srcs: [
+    {%- for src in target.srcs %}
+        "{{ src }}",
+    {%- endfor %}
+    ],
+{%- endif %}
+{%- if target.libs %}
+    libs: [
+    {%- for lib in target.libs %}
+        "{{ lib }}",
+    {%- endfor %}
+    ],
+{%- endif %}
+}

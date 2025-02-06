@@ -1,0 +1,151 @@
+# Copyright 2025 The Meson Development Team
+# SPDX-License-Identifier-Apache-2.0
+[[toolchain]]
+name = "linux_bionic_x86_64"
+
+[toolchain.host_machine]
+cpu_family = "x86_64"
+cpu = "x86_64"
+system = "android"
+endian = "little"
+
+[toolchain.c]
+compiler_id = "clang"
+linker_id = "ld.lld"
+version = "21.0.0"
+
+[toolchain.cpp]
+compiler_id = "clang"
+linker_id = "ld.lld"
+version = "21.0.0"
+
+[toolchain.rust]
+compiler_id = "rustc"
+linker_id = "ld.lld"
+version = "1.89.0"
+
+[toolchain.c.links.fails]
+"gc-sections" = true
+"GCC 64bit atomics" = true
+"Bsymbolic" = true
+"xlocale" = true
+
+[toolchain.c.check_header.fails]
+"xlocale.h" = true
+
+[toolchain.c.has_function.fails]
+bswap32 = true
+bswap64 = true
+clz = true
+clzll = true
+ctz = true
+expect = true
+ffs = true
+ffsll = true
+popcount = true
+popcountll = true
+unreachable = true
+types_compatible_p = true
+reallocarray = true
+fmemopen = true
+sched_getaffinity = true
+posix_memalign = true
+dladdr = true
+dl_iterate_phdr = true
+clock_gettime = true
+
+[toolchain.c.supported_link_arguments.fails]
+args = [
+    "-Wl,--gdb-index",
+    "-Wl,--build-id=sha1",
+]
+
+[[toolchain]]
+name = "linux_bionic_arm64"
+
+[toolchain.host_machine]
+cpu_family = "aarch64"
+cpu = "armv9"
+system = "android"
+endian = "little"
+
+[toolchain.c]
+compiler_id = "clang"
+linker_id = "ld.lld"
+version = "21.0.0"
+
+[toolchain.cpp]
+compiler_id = "clang"
+linker_id = "ld.lld"
+version = "21.0.0"
+
+[toolchain.rust]
+compiler_id = "rustc"
+linker_id = "ld.lld"
+version = "1.89.0"
+
+[toolchain.c.links.fails]
+"gc-sections" = true
+"GCC 64bit atomics" = true
+"Bsymbolic" = true
+"xlocale" = true
+
+[toolchain.c.check_header.fails]
+"xlocale.h" = true
+
+[toolchain.c.has_function.fails]
+bswap32 = true
+bswap64 = true
+clz = true
+clzll = true
+ctz = true
+expect = true
+ffs = true
+ffsll = true
+popcount = true
+popcountll = true
+unreachable = true
+types_compatible_p = true
+reallocarray = true
+fmemopen = true
+sched_getaffinity = true
+posix_memalign = true
+dladdr = true
+dl_iterate_phdr = true
+clock_gettime = true
+
+[toolchain.c.supported_link_arguments.fails]
+args = [
+    "-Wl,--gdb-index",
+    "-Wl,--build-id=sha1",
+]
+
+[[toolchain]]
+name = "linux_glibc_x86_64"
+
+[toolchain.host_machine]
+cpu_family = "x86_64"
+cpu = "x86_64"
+system = "linux"
+endian = "little"
+
+[toolchain.c]
+compiler_id = "clang"
+linker_id = "ld.lld"
+version = "21.0.0"
+
+[toolchain.cpp]
+compiler_id = "clang"
+linker_id = "ld.lld"
+version = "21.0.0"
+
+[toolchain.rust]
+compiler_id = "rustc"
+linker_id = "ld.lld"
+version = "1.89.0"
+
+[toolchain.c.check_header.fails]
+"xlocale.h" = true
+
+[toolchain.c.has_function.fails]
+qsort_s = true

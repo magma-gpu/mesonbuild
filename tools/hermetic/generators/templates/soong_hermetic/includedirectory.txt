@@ -1,0 +1,13 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{% import 'buckets.tmpl' as buckets %}
+cc_library_headers {
+    name: "{{ target.name }}",
+    vendor: true,
+{%- if target.host_supported %}
+    host_supported: true,
+{%- endif -%}
+    {{- buckets.render_bucket_property(target.paths.buckets.get('common', {}).get('', []), 'export_include_dirs', 0) }}
+    {{- buckets.render_target_blocks(target, 0) }}
+}

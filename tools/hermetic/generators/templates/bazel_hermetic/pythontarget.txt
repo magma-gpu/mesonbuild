@@ -1,0 +1,21 @@
+{# Copyright © 2024 The Meson Development Team
+   SPDX-License-Identifier: MIT
+#}
+py_binary(
+  name = "{{ target.name }}",
+  main = "{{ target.main }}",
+{%- if target.srcs %}
+  srcs = [
+  {%- for src in target.srcs %}
+    "{{ src }}",
+  {%- endfor %}
+  ],
+{%- endif %}
+{%- if target.imports %}
+  imports = [
+  {%- for import in target.imports %}
+    "{{ import }}",
+  {%- endfor %}
+  ],
+{%- endif %}
+)

@@ -1,0 +1,12 @@
+{# Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: MIT
+#}
+{%- import 'buckets.tmpl' as buckets -%}
+cc_library(
+  name = "{{ target.name }}",
+  shared = True,
+  {{- buckets.render_target_blocks(target, 2) }}
+  visibility = [ "//visibility:public" ],
+  {# Fuchsia Vulkan ICDs may not have shared c++ dependency #}
+  user_link_flags = ["-static-libstdc++"],
+)

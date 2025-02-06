@@ -1,0 +1,17 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+license {
+    name: "{{ license_name }}",
+    visibility: [":__subpackages__"],
+    license_kinds: [
+{%- for license in licenses %}
+        "SPDX-license-identifier-{{ license }}",
+{%- endfor %}
+    ],
+    license_text: [
+{%- for text in license_texts %}
+        "{{ text }}",
+{%- endfor %}
+    ],
+}

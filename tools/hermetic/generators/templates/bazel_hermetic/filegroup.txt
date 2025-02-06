@@ -1,0 +1,9 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{%- import 'buckets.tmpl' as buckets -%}
+filegroup(
+    name = "{{ target.name }}",
+    {{- buckets.render_target_blocks(target, 4) }}
+    visibility = ["//visibility:public"],
+)

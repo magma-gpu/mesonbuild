@@ -1,0 +1,5 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{% import 'buckets.tmpl' as buckets %}
+{{ buckets.render_property_simple(target.all_flags.buckets.get('common', {}).get('', []), target.name, 0) }}

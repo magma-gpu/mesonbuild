@@ -1,0 +1,20 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{% import 'buckets.tmpl' as buckets %}
+cc_library_shared {
+    name: "{{ target.name }}",
+    vendor: true,
+{%- if target.host_supported %}
+    host_supported: true,
+{%- endif -%}
+    {{- buckets.render_bucket_property(target.srcs.buckets.get('common', {}).get('', []), 'srcs', 0) }}
+    {{- buckets.render_bucket_property(target.flags.buckets.get('common', {}).get('', []), 'defaults', 0) }}
+    {{- buckets.render_bucket_property(target.static_libs.buckets.get('common', {}).get('', []), 'static_libs', 0) }}
+    {{- buckets.render_bucket_property(target.shared_libs.buckets.get('common', {}).get('', []), 'shared_libs', 0) }}
+    {{- buckets.render_bucket_property(target.whole_static_libs.buckets.get('common', {}).get('', []), 'whole_static_libs', 0) }}
+    {{- buckets.render_bucket_property(target.header_libs.buckets.get('common', {}).get('', []), 'header_libs', 0) }}
+    {{- buckets.render_bucket_property(target.generated_headers.buckets.get('common', {}).get('', []), 'generated_headers', 0) }}
+    {{- buckets.render_bucket_property(target.generated_sources.buckets.get('common', {}).get('', []), 'generated_sources', 0) }}
+    {{- buckets.render_target_blocks(target, 0) }}
+}

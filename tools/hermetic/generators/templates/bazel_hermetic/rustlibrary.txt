@@ -1,0 +1,17 @@
+{#- Copyright © 2024 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{%- import 'buckets.tmpl' as buckets -%}
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+rust_library(
+    name = "{{ target.name }}",
+    srcs = glob([
+    {%- for subdir in target.src_subdirs %}
+        "{{ subdir }}/**/*.rs",
+    {%- endfor %}
+    ]),
+    crate_root = "{{ target.crate_root }}",
+    edition = "2021",
+    {{- buckets.render_target_blocks(target, 4) }},
+)

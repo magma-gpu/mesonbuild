@@ -1,0 +1,58 @@
+# Copyright 2025 The Meson Development Team
+# SPDX-License-Identifier: Apache-2.0
+[project]
+project_name = 'aosp_mesa3d'
+build_system = 'soong'
+
+[copyright]
+license_name = "external_mesa3d_license"
+licenses = ["MIT", "Apache-2.0", "GPL-1.0-or-later", "GPL-2.0-only"]
+license_texts = ["LICENSE"]
+
+[[config]]
+config_name = 'aosp_bionic_drivers'
+
+[config.properties]
+host_toolchains = ["linux_bionic_arm64", "linux_bionic_x86_64"]
+build_toolchains = ["linux_glibc_x86_64"]
+
+[config.meson_options]
+platforms = "android"
+vulkan-drivers = "gfxstream,swrast"
+gallium-drivers = "" 
+virtgpu_kumquat = true
+opengl = false
+egl = "disabled"
+
+[[config]]
+config_name = 'aosp_surfaceless_drivers'
+
+[config.properties]
+host_toolchains = ["linux_bionic_arm64", "linux_bionic_x86_64"]
+build_toolchains = ["linux_glibc_x86_64"]
+custom_variable = [
+    { global = "gfxstream", local = "mesa3d_platforms" } 
+]
+
+[config.meson_options]
+platforms = ""
+vulkan-drivers = "gfxstream"
+gallium-drivers = ""
+opengl = false
+egl = "disabled"
+
+[[config]]
+config_name = 'aosp_glibc_drivers'
+
+[config.properties]
+host_toolchains = ["linux_glibc_x86_64"]
+build_toolchains = ["linux_glibc_x86_64"]
+
+[config.meson_options]
+platforms = "android"
+android-stub = true
+vulkan-drivers = "gfxstream,swrast"
+gallium-drivers = "" 
+virtgpu_kumquat = true
+opengl = false
+egl = "disabled"

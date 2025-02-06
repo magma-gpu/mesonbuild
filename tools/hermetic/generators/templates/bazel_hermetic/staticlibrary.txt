@@ -1,0 +1,10 @@
+{# Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: MIT
+#}
+{%- import 'buckets.tmpl' as buckets -%}
+cc_library(
+    name = "{{ target.name }}",
+    {{- buckets.render_target_blocks(target, 4) }}
+    visibility = [ "//visibility:public" ],
+    alwayslink = True,
+)

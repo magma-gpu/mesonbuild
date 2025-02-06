@@ -1,0 +1,64 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{% macro render_property_simple(items, name, indent_level) -%}
+{{ ' ' * indent_level }}{{ name }} = [
+{%- for item in items %}
+{{ ' ' * indent_level }}"{{ item }}",
+{%- endfor %}
+{{ ' ' * indent_level }}]
+{%- endmacro %}
+
+{% macro render_target_blocks(target, indent_level) -%}
+{# Map of HermeticTarget attribute names to Bazel property names #}
+{%- set attr_map = {
+    'srcs': 'srcs', 'flags': 'copts', 'static_libs': 'deps',
+    'shared_libs': 'deps', 'whole_static_libs': 'deps',
+    'header_libs': 'deps', 'generated_headers': 'hdrs',
+    'generated_sources': 'srcs', 'include_dirs': 'includes',
+    'paths': 'includes', 'cflags': 'copts', 'cppflags': 'copts'
+} -%}
+
+{#- Collect all unique toolchain keys from buckets that actually exist on the target #}
+{%- set toolchains = [] -%}
+{%- for attr_name in attr_map.keys() -%}
+  {%- if hasattr(target, attr_name) -%}
+    {%- for key in getattr(target, attr_name).buckets.keys() -%}
+      {%- do toolchains.append(key) -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- set unique_toolchains = toolchains | unique | reject("==", "common") | list -%}
+
+{#- Render common properties first #}
+{%- for attr_name, bazel_name in attr_map.items() %}
+  {%- if hasattr(target, attr_name) and getattr(target, attr_name).buckets.get('common', {}).get('', []) %}
+    {{- render_property_simple(getattr(target, attr_name).buckets.get('common', {}).get('', []), bazel_name, indent_level) }},
+  {%- endif %}
+{%- endfor %}
+
+{#- Render toolchain-specific properties using select #}
+{%- if unique_toolchains %}
+  {%- for attr_name, bazel_name in attr_map.items() %}
+    {%- set toolchain_items = {} -%}
+    {%- for toolchain in unique_toolchains %}
+      {%- if hasattr(target, attr_name) and getattr(target, attr_name).buckets.get(toolchain, {}).get('', []) %}
+        {%- set toolchain_label = '//hermetic/toolchains:' + toolchain -%}
+        {%- do toolchain_items.update({toolchain_label: getattr(target, attr_name).buckets.get(toolchain, {}).get('', [])}) -%}
+      {%- endif %}
+    {%- endfor %}
+    {%- if toolchain_items %}
+    {{ ' ' * indent_level }}{{ bazel_name }} = select({
+      {%- for toolchain, items in toolchain_items.items() %}
+        {{ ' ' * (indent_level) }}"{{ toolchain }}": [
+        {%- for item in items %}
+            {{ ' ' * (indent_level) }}"{{ item }}",
+        {%- endfor %}
+        ],
+      {%- endfor %}
+        {{ ' ' * (indent_level) }}"//conditions:default": [],
+    }),
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
+{%- endmacro %}

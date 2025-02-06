@@ -1,0 +1,51 @@
+{#- Copyright © 2025 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+-#}
+{% macro render_bucket_property(items, name, indent_level) -%}
+{%- if items %}
+    {{ ' ' * indent_level }}{{ name }}: [
+{%- for item in items %}
+        {{ ' ' * (indent_level) }}"{{ item }}",
+{%- endfor %}
+    {{ ' ' * indent_level }}],
+{%- endif -%}
+{%- endmacro %}
+
+{% macro render_target_blocks(target, indent_level) -%}
+{# Map of HermeticTarget attribute names to Soong property names #}
+{%- set attr_map = {
+    'srcs': 'srcs', 'flags': 'defaults', 'static_libs': 'static_libs',
+    'shared_libs': 'shared_libs', 'whole_static_libs': 'whole_static_libs',
+    'header_libs': 'header_libs', 'generated_headers': 'generated_headers',
+    'generated_sources': 'generated_sources', 'include_dirs': 'header_libs',
+    'paths': 'export_include_dirs', 'cflags': 'cflags', 'cppflags': 'cppflags'
+} -%}
+
+{# Collect all unique toolchain keys from buckets that actually exist on the target #}
+{%- set toolchains = [] -%}
+{%- for attr_name in attr_map.keys() -%}
+  {%- if hasattr(target, attr_name) -%}
+    {%- for key in getattr(target, attr_name).buckets.keys() -%}
+      {%- do toolchains.append(key) -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- set unique_toolchains = toolchains | unique | reject("==", "common") | list -%}
+{%- if unique_toolchains %}
+    {{ ' ' * indent_level }}target: {
+{%- for toolchain in unique_toolchains %}
+        {{ ' ' * (indent_level) }}{{ toolchain }}: {
+{%- for attr_name, soong_name in attr_map.items() %}
+{%- if hasattr(target, attr_name) and getattr(target, attr_name).buckets.get(toolchain, {}).get('', []) %}
+            {{ ' ' * (indent_level) }}{{ soong_name }}: [
+{%- for item in getattr(target, attr_name).buckets.get(toolchain, {}).get('', []) %}
+                {{ ' ' * (indent_level) }}"{{ item }}",
+{%- endfor %}
+            {{ ' ' * (indent_level) }}],
+{%- endif %}
+{%- endfor %}
+        {{ ' ' * (indent_level) }}},
+{%- endfor %}
+    {{ ' ' * indent_level }}},
+{%- endif -%}
+{%- endmacro %}

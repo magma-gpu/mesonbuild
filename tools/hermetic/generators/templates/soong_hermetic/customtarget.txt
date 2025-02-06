@@ -1,0 +1,25 @@
+{# Copyright © 2024 The Meson Development Team
+   SPDX-License-Identifier: Apache-2.0
+#}
+genrule {
+  name: "{{ target.name }}",
+{%- if target.srcs %}
+  srcs: [
+  {%- for src in target.srcs %}
+    "{{ src }}",
+  {%- endfor %}
+  ],
+{%- endif %}
+  out: [
+  {%- for o in target.out %}
+    "{{ o }}",
+  {%- endfor %}
+  ],
+  tools: [
+  {%- for tool in target.tools %}
+    "{{ tool }}",
+  {%- endfor %}
+  ],
+  cmd: "{{ target.cmd | wordwrap(80, wrapstring='" + 
+        "') }}",
+}
