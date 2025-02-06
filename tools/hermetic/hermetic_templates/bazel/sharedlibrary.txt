@@ -1,0 +1,15 @@
+{# Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: MIT
+#}
+cc_shared_library(
+  name = "{{ target.name }}",
+  copts = {{ " + ".join(target.flags) if target.flags else "[]" }},
+  deps = [
+  {%- for dep in target.deps %}
+    "{{ dep }}",
+  {%- endfor %}
+  ],
+  visibility = [ "//visibility:public" ],
+  {# Fuchsia Vulkan ICDs may not have shared c++ dependency #}
+  user_link_flags = ["-static-libstdc++"],
+)

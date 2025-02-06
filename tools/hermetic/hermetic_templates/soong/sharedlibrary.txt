@@ -1,0 +1,81 @@
+{#- Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: Apache-2.0
+-#}
+cc_library_shared {
+    name: "{{ target.name }}",
+    host_supported: {{ target.host_supported }},
+    srcs: [
+    {%- for src in target.srcs if not src.endswith(('.h', '.hh', '.hpp', '.hxx')) %}
+        "{{ src }}",
+    {%- endfor %}
+    ],
+    {% if target.generated_headers -%}
+    generated_headers: [
+    {%- for generated in target.generated_headers %}
+        "{{ generated }}",
+    {%- endfor %}
+    ],
+    {% endif -%}
+    {% if target.generated_sources -%}
+    generated_sources: [
+    {%- for generated in target.generated_sources %}
+        "{{ generated }}",
+    {%- endfor %}
+    ],
+    {% endif -%}
+    {% if state.c_std -%}
+    c_std: "{{ state.c_std }}",
+    {% endif -%}
+    {% if state.cpp_std -%}
+    cpp_std: "{{ state.cpp_std }}",
+    {% endif -%}
+    {% if target.local_include_dirs -%}
+    local_include_dirs: [
+    {%- for inc in target.local_include_dirs %}
+        "{{ inc }}",
+    {%- endfor %}
+    ],
+    {% endif -%}
+    {% if target.flags -%}
+    defaults: [
+    {%- for flag in target.flags %}
+        "{{ flag }}",
+    {%- endfor %}
+    ],
+    {% endif -%}
+    {% if target.static_libs -%}
+    static_libs: [
+{%- for lib in target.static_libs %}
+        "{{ lib }}",
+{%- endfor %}
+{%- for lib in target.hermetic_dependencies %}
+        "{{ lib }}",
+{%- endfor %}
+    ],
+    {% endif -%}
+    {% if target.whole_static_libs -%}
+    whole_static_libs: [
+    {%- for lib in target.whole_static_libs %}
+        "{{ lib }}",
+    {%- endfor %}
+    ],
+    {% endif -%}
+    {% if target.shared_libs -%}
+    shared_libs: [
+    {%- for lib in target.shared_libs %}
+        "{{ lib }}",
+    {%- endfor %}
+    ],
+    {% endif -%}
+    {% if target.header_libs or target.include_dirs -%}
+    header_libs: [
+    {%- for lib in target.header_libs %}
+        "{{ lib }}",
+    {%- endfor %}
+    {%- for lib in target.include_dirs %}
+        "{{ lib }}",
+    {%- endfor %}
+    ]
+    {% endif %}
+}
+

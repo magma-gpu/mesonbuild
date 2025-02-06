@@ -1,0 +1,21 @@
+{#- Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: Apache-2.0
+-#}
+cc_defaults {
+    name: "{{ target.name }}",
+{%- if target.cflags %}
+    cflags: [
+{%- for flag in target.cflags %}
+        "{{ flag }}",
+{%- endfor %}
+    ],
+{%- endif %}
+{%- if target.cppflags %}
+    cppflags: [
+{%- for flag in target.cppflags %}
+        "{{ flag }}",
+{%- endfor %}
+    ],
+{%- endif %}
+}
+

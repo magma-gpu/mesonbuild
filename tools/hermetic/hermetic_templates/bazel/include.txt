@@ -1,0 +1,9 @@
+cc_library(
+    name = "{{ target.name }}",
+    hdrs = glob([
+    {%- for dir in target.paths %}
+        "{{ dir }}/**/*.h",
+    {%- endfor %}
+    ]),
+    visibility = [ "//visibility:public" ],
+)

@@ -1,0 +1,20 @@
+{#- Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: Apache-2.0
+-#}
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+rust_library(
+    name = "{{ target.name }}",
+    srcs = glob([
+    {%- for subdir in target.src_subdirs %}
+        "{{ subdir }}/**/*.rs",
+    {%- endfor %}
+    ]),
+    crate_root = "{{ target.crate_root }}",
+    edition = "2021",
+    deps = [
+    {%- for lib in target.static_libs %}
+        "//{{ lib.replace(':', '/') }}",
+    {%- endfor %}
+    ],
+)

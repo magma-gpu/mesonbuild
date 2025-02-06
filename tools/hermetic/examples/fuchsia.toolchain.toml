@@ -1,0 +1,99 @@
+# Copyright 2024 The Meson Authors
+# SPDX-License-Identifier: Apache-2.0
+
+[toolchain]
+name = "Fuchsia SDK"
+
+[toolchain.c]
+type = "clang"
+version = "17.0.3"
+linker = "lld"
+
+[toolchain.cpp]
+type = "clang++"
+version = "17.0.3"
+linker = "lld"
+
+[toolchain.rust]
+type = "rustc"
+version = "1.70.0"
+linker = "rust-lld"
+
+[toolchain.linkers]
+[toolchain.linkers.lld]
+type = "gnu-like"
+
+[toolchain.linkers.rust-lld]
+type = "gnu-like"
+
+[toolchain.c.compiles]
+"__uint128_t" = true
+"POWER8 intrinsics" = true
+"GCC atomic builtins" = true
+
+[toolchain.c.links]
+"gc-sections" = true
+"split TLSDESC" = true
+"GNU qsort_r" = true
+"BSD qsort_r" = false
+"strtod has locale support" = true
+"Bsymbolic" = true
+"version-script" = true
+"dynamic-list" = true
+"GCC atomic builtins required -latomic" = false
+"GCC 64bit atomics" = true
+
+[toolchain.c.check_header]
+"sched.h" = true
+"sys/sysctl.h" = true
+"xlocale.h" = true
+"linux/futex.h" = true
+"endian.h" = true
+"dlfcn.h" = true
+"sys/shm.h" = true
+"cet.h" = true
+"pthread_np.h" = true
+"sys/inotify.h" = true
+"linux/udmabuf.h" = true
+
+[toolchain.c.has_header_symbol]
+"sys/sysmacros.h" = { major = true, minor = true, makedev = true }
+"sys/mkdev.h" = { major = false, minor = false, makedev = false }
+"va/va.h" = { VASurfaceAttribDRMFormatModifiers = true }
+"time.h" = { "struct timespec" = true }
+"errno.h" = { program_invocation_name = true }
+"math.h" = { issignaling = true }
+
+[toolchain.c.has_function]
+"bswap32" = true
+"bswap64" = true
+"clz" = true
+"clzll" = true
+"ctz" = true
+"expect" = true
+"ffs" = true
+"ffsll" = true
+"popcount" = true
+"popcountll" = true
+"unreachable" = true
+"types_compatible_p" = true
+"reallocarray" = true
+"fmemopen" = true
+"strtof" = true
+"mkostemp" = true
+"memfd_create" = true
+"random_r" = true
+"flock" = true
+"strtok_r" = true
+"getrandom" = true
+"qsort_s" = false
+"posix_fallocate" = true
+"secure_getenv" = false
+"sysconf" = true
+"thrd_create" = true
+"dlopen" = true
+"dladdr" = true
+"dl_iterate_phdr" = true
+"pthread_setaffinity_np" = true
+"sched_getaffinity" = true
+"__builtin_ia32_clflushopt" = true

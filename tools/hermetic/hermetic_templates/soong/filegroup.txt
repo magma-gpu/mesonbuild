@@ -1,0 +1,8 @@
+{#- Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: Apache-2.0
+-#}
+filegroup {
+    name: "{{ fg.name }}",
+    srcs: ["{{ fg.src }}"],
+}
+

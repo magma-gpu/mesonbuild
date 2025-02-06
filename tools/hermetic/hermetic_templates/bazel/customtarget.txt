@@ -1,0 +1,23 @@
+{# Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: MIT
+#}
+genrule(
+  name = "{{ target.name }}",
+  srcs = [
+  {%- for src in target.srcs %}
+    "{{ src }}",
+  {%- endfor %}
+  ],
+  outs = [
+  {%- for out in target.out %}
+    "{{ out }}",
+  {%- endfor %}
+  ],
+  tools = [
+  {%- for tool in target.tools %}
+    "{{ tool }}",
+  {%- endfor %}
+  ],
+  cmd = "{{ target.cmd | wordwrap(80, wrapstring='" + 
+        "') }}",
+)

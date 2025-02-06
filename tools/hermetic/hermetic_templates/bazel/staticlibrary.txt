@@ -1,0 +1,47 @@
+{# Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: MIT
+#}
+cc_library(
+    name = "{{ target.name }}",
+    srcs = [
+    {%- for src in target.srcs %}
+        "{{ src }}",
+    {%- endfor %}
+    ],
+    hdrs = [
+    {%- for hdr in target.generated_headers %}
+        "{{ hdr }}",
+    {%- endfor -%}
+    ],
+    {# Tells Bazel to use -isystem for targets that depend on this one,
+       which is needed for clients that include package headers with angle brackets.
+    #}
+    includes = [
+    {%- for include_dir in target.local_include_dirs %}
+        "{{ include_dir }}",
+    {%- endfor %}
+    {%- for include_dir in target.export_include_dirs %}
+        "{{ include_dir }}",
+    {%- endfor %}
+    ],
+    copts = {{ " + ".join(target.flags) if target.flags else "[]" }},
+    deps = [
+    {%- for dep in target.deps %}
+        "{{ dep }}",
+    {%- endfor %}
+    {%- for dep in target.include_dirs %}
+        ":{{ dep }}",
+    {%- endfor %}
+    ],
+    target_compatible_with = [
+    {%- for target_compat in target.target_compatible_with %}
+        "{{ target_compat }}",
+    {%- endfor %}
+    ],
+    visibility = [ "//visibility:public" ],
+    {# Bazel doesn't seem to have a 'whole_static_libs'
+      option for targets that link against static libs;
+      workaround is to specify every static lib as alwaysLink
+    #}
+    alwayslink = True,
+)

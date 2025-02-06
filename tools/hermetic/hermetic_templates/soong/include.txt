@@ -1,0 +1,12 @@
+{#- Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: Apache-2.0
+-#}
+cc_library_headers {
+    name: "{{ target.name }}",
+    export_include_dirs: [
+    {%- for dir in target.paths %}
+        "{{ dir }}",
+    {%- endfor %}
+    ],
+}
+

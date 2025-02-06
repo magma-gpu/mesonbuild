@@ -1,0 +1,93 @@
+# Copyright 2024 Brandon Nguyen
+# SPDX-License-Identifier: Apache-2.0
+build = 'soong'
+
+[copyright]
+holder = "Android Open Source Project"
+year = 2024
+license = "Apache-2.0"
+license_name = "external_mesa3d_license"
+
+# Base project config which contain shared attributes which
+# all other projects must contain / override
+[project_config]
+name = 'android_aarch64_drivers'
+
+# minimum_literal = {'cpu', 'cpu_family', 'endian', 'system'}
+[project_config.host_machine]
+cpu = 'aarch64'
+cpu_family = 'aarch64'
+system = 'android'
+endian = 'little'
+
+# If host/build machine are empty, the script will default to the native
+# machine specs
+[project_config.build_machine]
+# cpu = 'aarch64'
+# cpu_family = 'aarch64'
+# system = 'linux'
+# endian = 'little'
+
+[project_config.target_machine]
+cpu = 'aarch64'
+cpu_family = 'aarch64'
+system = 'android'
+endian = 'little'
+
+[project_config.meson_options]
+platforms="android"
+vulkan-drivers="gfxstream,freedreno,swrast,panfrost"
+gallium-drivers="" 
+virtgpu_kumquat=true
+opengl=false
+egl="disabled"
+
+[project_config.dependencies]
+libdrm = [
+    { target_name = 'libdrm', target_type = 'SHARED_LIBRARY' }
+]
+libzstd = [
+    { target_name = 'libzstd', target_type = 'SHARED_LIBRARY' }
+]
+hardware = [
+    { target_name = 'libhardware', target_type = 'SHARED_LIBRARY' },
+    { target_name = 'hwvulkan_headers', target_type = 'HEADER_LIBRARY' }
+]
+cutils = [
+    { target_name = 'libcutils', target_type = 'SHARED_LIBRARY' }
+]
+log = [
+    { target_name = 'liblog', target_type = 'SHARED_LIBRARY' }
+]
+nativewindow = [
+    { target_name = 'libnativewindow', target_type = 'SHARED_LIBRARY' }
+]
+sync = [
+    { target_name = 'libsync', target_type = 'STATIC_LIBRARY' }
+]
+rustix = [
+    { target_name = 'librustix', target_type = 'STATIC_LIBRARY' }
+]
+cfg_if = [
+    { target_name = 'libcfg_if', target_type = 'STATIC_LIBRARY' }
+]
+log_rust = [
+    { target_name = 'liblog_rust', target_type = 'STATIC_LIBRARY' }
+]
+thiserror = [
+    { target_name = 'libthiserror', target_type = 'STATIC_LIBRARY' }
+]
+zerocopy = [
+    { target_name = 'libzerocopy', target_type = 'STATIC_LIBRARY' }
+]
+libclc = [
+    { target_name = "libclc_aosp_mesa", target_type = 'SHARED_LIBRARY', pkgconfig = {'libexecdir' = 'external/mesa3d/llvm-fake/clc-dir'}}
+]
+llvm = [
+    { target_name = 'libLLVM16_swiftshader', target_type = 'SHARED_LIBRARY', version = '16.0', configtool = { "has-rtti" = "YES", "libdir" = "/tmp/" } }
+]
+
+[host_tools.python3]
+dependencies = ["mako"]
+
+

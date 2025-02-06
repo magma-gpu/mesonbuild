@@ -1,0 +1,158 @@
+# Copyright 2024 Brandon Nguyen
+# SPDX-License-Identifier: Apache-2.0
+
+# New Toolchain Section
+[toolchain]
+name = "AndroidNDK_r34"
+
+[toolchain.c]
+type = "clang"
+version = "18.0.3"
+linker = "lld"
+
+[toolchain.cpp]
+type = "clang++"
+version = "18.0.3"
+linker = "lld"
+
+[toolchain.rust]
+type = "rustc"
+version = "1.82.0"
+linker = "rust-lld"
+
+[toolchain.linkers]
+[toolchain.linkers.lld]
+type = "gnu-like"
+
+[toolchain.linkers.rust-lld]
+type = "gnu-like"
+
+[toolchain.c.compiles]
+"__uint128_t" = true
+"GCC atomic builtins" = true
+
+[toolchain.c.links]
+"gc-sections" = true
+"Bsymbolic" = true
+"strtod has locale support" = true
+"GCC 64bit atomics" = true
+
+[toolchain.c.check_header]
+"sched.h" = true
+"xlocale.h" = true
+"linux/futex.h" = true
+"endian.h" = true
+"dlfcn.h" = true
+"sys/shm.h" = true
+"cet.h" = true
+"sys/inotify.h" = true
+"linux/udmabuf.h" = true
+
+[toolchain.c.has_header_symbol]
+"sys/sysmacros.h" = { major = true, minor = true, makedev = true }
+"time.h" = { "struct timespec" = true }
+
+[toolchain.c.has_function]
+bswap32 = true
+bswap64 = true
+clz = true
+clzll = true
+ctz = true
+expect = true
+ffs = true
+ffsll = true
+popcount = true
+popcountll = true
+unreachable = true
+types_compatible_p = true
+reallocarray = true
+fmemopen = true
+sched_getaffinity = true
+dladdr = true
+dl_iterate_phdr = true
+clock_gettime = true
+strtof = true
+mkostemp = true
+memfd_create = true
+flock = true
+strtok_r = true
+getrandom = true
+posix_fallocate = true
+sysconf = true
+posix_memalign = true
+
+[toolchain.c.has_function_attribute]
+const = true
+flatten = true
+malloc = true
+pure = true
+unused = true
+warn_unused_result = true
+weak = true
+format = true
+packed = true
+returns_nonnull = true
+alias = true
+noreturn = true
+"visibility:hidden" = true
+
+[toolchain.c.has_member]
+"struct dirent" = { d_type = true }
+
+[toolchain.c.supported_arguments]
+args = [
+    "-Werror=implicit-function-declaration",
+    "-Werror=missing-prototypes",
+    "-Werror=return-type",
+    "-Werror=empty-body",
+    "-Werror=gnu-empty-initializer",
+    "-Werror=incompatible-pointer-types",
+    "-Werror=int-conversion",
+    "-Werror=pointer-arith",
+    "-Werror=vla",
+    "-Wimplicit-fallthrough",
+    "-Wmisleading-indentation",
+    "-Wno-missing-field-initializers",
+    "-Wno-format-truncation",
+    "-fno-math-errno",
+    "-fno-trapping-math",
+    "-Qunused-arguments",
+    "-fno-common",
+    "-Wno-initializer-overrides",
+    "-Wno-override-init",
+    "-Wno-unknown-pragmas",
+    "-Wno-microsoft-enum-value",
+    "-Wno-unused-function",
+    "-Werror=format",
+    "-Wformat-security",
+    "-Werror=thread-safety",
+    "-ffunction-sections",
+    "-fdata-sections",
+]
+
+[toolchain.c.supported_link_arguments]
+args = [
+    "-Wl,--build-id=sha1",
+    "-Wl,--gdb-index",
+]
+[toolchain.cpp.supported_arguments]
+args = [
+    "-Werror=return-type",
+    "-Werror=empty-body",
+    "-Wmisleading-indentation",
+    "-Wno-non-virtual-dtor",
+    "-Wno-missing-field-initializers",
+    "-Wno-format-truncation",
+    "-fno-math-errno",
+    "-fno-trapping-math",
+    "-Qunused-arguments",
+    "-Wno-unknown-pragmas",
+    "-Wno-microsoft-enum-value",
+    "-Werror=format",
+    "-Wformat-security",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-Werror=pointer-arith",
+    "-Werror=vla",
+    "-Werror=gnu-empty-initializer",
+]

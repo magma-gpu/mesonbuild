@@ -1,0 +1,53 @@
+# Copyright 2024 Google LLC
+# SPDX-License-Identifier: Apache-2.0
+build = 'bazel'
+
+[copyright]
+holder = "Google Inc."
+year = 2024
+license = "BSD-2-Clause"
+license_name = "fuchsia_license"
+
+[project_config]
+name = 'fuchsia_aarch64_drivers'
+
+[project_config.host_machine]
+cpu_family = 'aarch64'
+cpu = 'aarch64'
+system = 'fuchsia'
+endian = 'little'
+
+[project_config.build_machine]
+cpu_family = 'x86_64'
+cpu = 'x86_64'
+system = 'linux'
+endian = 'little'
+
+[project_config.target_machine]
+cpu_family = 'aarch64'
+cpu = 'aarch64'
+system = 'fuchsia'
+endian = 'little'
+
+[project_config.meson_options]
+platforms = ""
+gallium-drivers = ''
+vulkan-drivers = 'freedreno'
+freedreno-kmds = 'kgsl'
+platform-sdk-version = 33
+shader-cache = 'disabled'
+
+[project_config.dependencies]
+zlib = [
+    { target_name = '@zlib//:zlib', target_type = 'STATIC_LIBRARY' }
+]
+libmagma = [
+    { target_name = '@fuchsia_sdk//pkg/magma_client', target_type = 'STATIC_LIBRARY' }
+]
+libmagma_virt = [
+    # No targets
+]
+fuchsia_io = [
+    { target_name = '@fuchsia_sdk//fidl/fuchsia.io:fuchsia.io_cpp', target_type = 'STATIC_LIBRARY' }
+]
+

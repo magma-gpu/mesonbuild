@@ -1,0 +1,8 @@
+{{ target.name }} = [
+    {%- for flag in target.cflags %}
+    "{{ flag }}",
+    {%- endfor %}
+    {%- for flag in target.cppflags %}
+    "{{ flag }}",
+    {%- endfor %}
+]

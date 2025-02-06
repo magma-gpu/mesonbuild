@@ -1,0 +1,22 @@
+{#- Copyright © 2024 The Meson Authors
+   SPDX-License-Identifier: Apache-2.0
+-#}
+rust_library {
+    name: "{{ target.name }}",
+    host_supported: {{ target.host_supported }},
+    crate_name: "{{ target.name.replace('lib', '') }}",
+    cargo_env_compat: true,
+    cargo_pkg_version: "0.1.0",
+    crate_root: "{{ target.crate_root }}",
+    srcs: [
+    {%- for src in target.srcs %}
+        "{{ src }}",
+    {%- endfor %}
+    ],
+    edition: "2021",
+    rustlibs: [
+    {%- for lib in target.static_libs %}
+        "{{ lib }}",
+    {%- endfor %}
+    ],
+}
