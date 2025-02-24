@@ -221,6 +221,9 @@ def get_backend_from_name(backend: str, build: T.Optional[build.Build] = None, i
     if backend == 'ninja':
         from . import ninjabackend
         return ninjabackend.NinjaBackend(build, interpreter)
+    elif backend == 'hermetic':
+        from . import hermeticbackend
+        return hermeticbackend.HermeticBackend(build, interpreter)
     elif backend == 'vs':
         from . import vs2010backend
         return vs2010backend.autodetect_vs_version(build, interpreter)
