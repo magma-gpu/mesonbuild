@@ -1,0 +1,82 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "libmesaclc_c_flags",
+    cflags: [
+        "-DDYNAMIC_LIBCLC_PATH="external/mesa3d/llvm-fake/clc-dir/"",
+        "-DHAS_SPIRV_LINK_LLVM_WORKAROUND=1",
+    ],
+}
+
+cc_defaults {
+    name: "libmesaclc_cpp_flags",
+    cppflags: [
+        "-DLLVM_LIB_DIR="/tmp/"",
+        "-DDYNAMIC_LIBCLC_PATH="external/mesa3d/llvm-fake/clc-dir/"",
+        "-DHAS_SPIRV_LINK_LLVM_WORKAROUND=1",
+    ],
+}
+
+cc_library_static {
+    name: "libmesaclc",
+    host_supported: false,
+    srcs: [
+        "clc.c",
+        "clc_helpers.cpp",
+        "nir_load_libclc.c",
+    ],
+    generated_headers: [
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "libmesaclc_c_flags",
+        "libmesaclc_cpp_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+        "vtn",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+        "clang-cpp",
+        "libLLVM16_swiftshader",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_spirv",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

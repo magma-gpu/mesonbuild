@@ -1,0 +1,68 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "u_format_table_gen",
+    main: "u_format_table.py",
+    srcs: [
+        "u_format_pack.py",
+        "u_format_parse.py",
+        "u_format_table.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "u_format_gen.h",
+  srcs: [
+    "u_format.yaml",
+  ],
+  out: [
+    "u_format_gen.h",
+  ],
+  tools: [
+    "u_format_table_gen",
+  ],
+  cmd: "python3 $(location u_format_table_gen) $(location u_format.yaml) --enums &>" + 
+        "$(location u_format_gen.h)",
+}
+
+genrule {
+  name: "u_format_pack.h",
+  srcs: [
+    "u_format.yaml",
+  ],
+  out: [
+    "u_format_pack.h",
+  ],
+  tools: [
+    "u_format_table_gen",
+  ],
+  cmd: "python3 $(location u_format_table_gen) $(location u_format.yaml) --header &>" + 
+        "$(location u_format_pack.h)",
+}
+
+genrule {
+  name: "u_format_table.c",
+  srcs: [
+    "u_format.yaml",
+  ],
+  out: [
+    "u_format_table.c",
+  ],
+  tools: [
+    "u_format_table_gen",
+  ],
+  cmd: "python3 $(location u_format_table_gen) $(location u_format.yaml) &> $(location" + 
+        "u_format_table.c)",
+}
+

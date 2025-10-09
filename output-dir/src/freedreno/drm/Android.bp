@@ -1,0 +1,87 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "freedreno_drm_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "freedreno_drm",
+    host_supported: false,
+    srcs: [
+        "freedreno_bo.c",
+        "freedreno_bo_heap.c",
+        "freedreno_bo_cache.c",
+        "freedreno_device.c",
+        "freedreno_pipe.c",
+        "freedreno_ringbuffer.c",
+        "freedreno_ringbuffer_sp.c",
+        "msm/msm_bo.c",
+        "msm/msm_device.c",
+        "msm/msm_pipe.c",
+        "msm/msm_ringbuffer.c",
+        "msm/msm_ringbuffer_sp.c",
+    ],
+    generated_headers: [
+        "adreno.xml.h",
+        "a2xx.xml.h",
+        "a3xx.xml.h",
+        "a4xx.xml.h",
+        "a5xx.xml.h",
+        "a6xx.xml.h",
+        "a6xx_enums.xml.h",
+        "a6xx_descriptors.xml.h",
+        "a6xx_perfcntrs.xml.h",
+        "a7xx_enums.xml.h",
+        "a7xx_perfcntrs.xml.h",
+        "a6xx_gmu.xml.h",
+        "ocmem.xml.h",
+        "adreno_control_regs.xml.h",
+        "adreno_pipe_regs.xml.h",
+        "adreno_common.xml.h",
+        "adreno_pm4.xml.h",
+        "a6xx-pack.xml.h",
+        "adreno-pm4-pack.xml.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "freedreno_drm_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_freedreno",
+        "inc_src",
+    ]
+    
+}
+

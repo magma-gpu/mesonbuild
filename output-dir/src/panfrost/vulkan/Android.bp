@@ -1,0 +1,734 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "panvk_tracepoints_gen",
+    main: "panvk_tracepoints.py",
+    srcs: [
+        "panvk_tracepoints.py",
+        "perf/u_trace.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "panfrost_devenv_icd",
+  srcs: [
+    ":vk_icd_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "panfrost_devenv_icd.aarch64.json",
+  ],
+  tools: [
+    "vk_icd_gen_gen",
+  ],
+  cmd: "python3 $(location vk_icd_gen_gen) --api-version 1.4 --xml $(location" + 
+        "registry/vk.xml) --sizeof-pointer 0 --lib-path" + 
+        "/tmp/tmpx1uwqcvq/src/panfrost/vulkan/libvulkan_panfrost.so --out $(location" + 
+        "panfrost_devenv_icd.aarch64.json)",
+}
+
+genrule {
+  name: "panfrost_icd",
+  srcs: [
+    ":vk_icd_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "panfrost_icd.aarch64.json",
+  ],
+  tools: [
+    "vk_icd_gen_gen",
+  ],
+  cmd: "python3 $(location vk_icd_gen_gen) --api-version 1.4 --xml $(location" + 
+        "registry/vk.xml) --sizeof-pointer 0 --lib-path /usr/local/lib/x86_64-linux-" + 
+        "gnu/libvulkan_panfrost.so --out $(location panfrost_icd.aarch64.json)",
+}
+
+genrule {
+  name: "panvk_entrypoints.[ch]_header",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "panvk_entrypoints.h",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h $(location panvk_entrypoints.h) --out-c" + 
+        ""$(genDir)/placeholder.c" --prefix panvk --device-prefix panvk_v6 --device-" + 
+        "prefix panvk_v7 --device-prefix panvk_v9 --device-prefix panvk_v10 --device-" + 
+        "prefix panvk_v12 --device-prefix panvk_v13 --beta false",
+}
+
+genrule {
+  name: "panvk_entrypoints.[ch]_impl",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "panvk_entrypoints.c",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h "$(genDir)/panvk_entrypoints.h" --out-c $(location" + 
+        "panvk_entrypoints.c) --prefix panvk --device-prefix panvk_v6 --device-prefix" + 
+        "panvk_v7 --device-prefix panvk_v9 --device-prefix panvk_v10 --device-prefix" + 
+        "panvk_v12 --device-prefix panvk_v13 --beta false",
+}
+
+genrule {
+  name: "panvk_tracepoints.[ch]_header",
+  srcs: [
+  ],
+  out: [
+    "panvk_tracepoints.h",
+    "panvk_tracepoints_perfetto.h",
+  ],
+  tools: [
+    "panvk_tracepoints_gen",
+  ],
+  cmd: "python3 $(location panvk_tracepoints_gen) --import-path" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/util/perf/ --utrace-" + 
+        "hdr $(location panvk_tracepoints.h) --perfetto-hdr $(location" + 
+        "panvk_tracepoints_perfetto.h) --utrace-src "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "panvk_tracepoints.[ch]_impl",
+  srcs: [
+  ],
+  out: [
+    "panvk_tracepoints.c",
+  ],
+  tools: [
+    "panvk_tracepoints_gen",
+  ],
+  cmd: "python3 $(location panvk_tracepoints_gen) --import-path" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/util/perf/ --utrace-" + 
+        "hdr "$(genDir)/panvk_tracepoints.h" --perfetto-hdr" + 
+        ""$(genDir)/panvk_tracepoints_perfetto.h" --utrace-src $(location" + 
+        "panvk_tracepoints.c)",
+}
+
+cc_defaults {
+    name: "panvk_v10_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=10",
+    ],
+}
+
+cc_defaults {
+    name: "panvk_v12_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=12",
+    ],
+}
+
+cc_defaults {
+    name: "panvk_v13_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=13",
+    ],
+}
+
+cc_defaults {
+    name: "panvk_v6_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=6",
+    ],
+}
+
+cc_defaults {
+    name: "panvk_v7_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=7",
+    ],
+}
+
+cc_defaults {
+    name: "vulkan_panfrost_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "panvk_v10",
+    host_supported: false,
+    srcs: [
+        "panvk_vX_blend.c",
+        "panvk_vX_buffer_view.c",
+        "panvk_vX_cmd_fb_preload.c",
+        "panvk_vX_cmd_desc_state.c",
+        "panvk_vX_cmd_dispatch.c",
+        "panvk_vX_cmd_draw.c",
+        "panvk_vX_cmd_meta.c",
+        "panvk_vX_cmd_push_constant.c",
+        "panvk_vX_descriptor_set.c",
+        "panvk_vX_descriptor_set_layout.c",
+        "panvk_vX_device.c",
+        "panvk_vX_physical_device.c",
+        "panvk_vX_precomp_cache.c",
+        "panvk_vX_query_pool.c",
+        "panvk_vX_image_view.c",
+        "panvk_vX_nir_lower_descriptors.c",
+        "panvk_vX_sampler.c",
+        "panvk_vX_shader.c",
+        "csf/panvk_vX_bind_queue.c",
+        "csf/panvk_vX_cmd_buffer.c",
+        "csf/panvk_vX_cmd_dispatch.c",
+        "csf/panvk_vX_cmd_draw.c",
+        "csf/panvk_vX_cmd_event.c",
+        "csf/panvk_vX_cmd_query.c",
+        "csf/panvk_vX_cmd_precomp.c",
+        "csf/panvk_vX_event.c",
+        "csf/panvk_vX_exception_handler.c",
+        "csf/panvk_vX_gpu_queue.c",
+        "csf/panvk_vX_instr.c",
+        "csf/panvk_vX_utrace.c",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "libpan_shaders_v10.h_header",
+        "libpan_v10.cpp_header",
+    ],
+    generated_sources: [
+        "libpan_shaders_v10.h_impl",
+        "libpan_v10.cpp_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panvk_v10_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panvk_v12",
+    host_supported: false,
+    srcs: [
+        "panvk_vX_blend.c",
+        "panvk_vX_buffer_view.c",
+        "panvk_vX_cmd_fb_preload.c",
+        "panvk_vX_cmd_desc_state.c",
+        "panvk_vX_cmd_dispatch.c",
+        "panvk_vX_cmd_draw.c",
+        "panvk_vX_cmd_meta.c",
+        "panvk_vX_cmd_push_constant.c",
+        "panvk_vX_descriptor_set.c",
+        "panvk_vX_descriptor_set_layout.c",
+        "panvk_vX_device.c",
+        "panvk_vX_physical_device.c",
+        "panvk_vX_precomp_cache.c",
+        "panvk_vX_query_pool.c",
+        "panvk_vX_image_view.c",
+        "panvk_vX_nir_lower_descriptors.c",
+        "panvk_vX_sampler.c",
+        "panvk_vX_shader.c",
+        "csf/panvk_vX_bind_queue.c",
+        "csf/panvk_vX_cmd_buffer.c",
+        "csf/panvk_vX_cmd_dispatch.c",
+        "csf/panvk_vX_cmd_draw.c",
+        "csf/panvk_vX_cmd_event.c",
+        "csf/panvk_vX_cmd_query.c",
+        "csf/panvk_vX_cmd_precomp.c",
+        "csf/panvk_vX_event.c",
+        "csf/panvk_vX_exception_handler.c",
+        "csf/panvk_vX_gpu_queue.c",
+        "csf/panvk_vX_instr.c",
+        "csf/panvk_vX_utrace.c",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "libpan_shaders_v12.h_header",
+        "libpan_v12.cpp_header",
+    ],
+    generated_sources: [
+        "libpan_shaders_v12.h_impl",
+        "libpan_v12.cpp_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panvk_v12_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panvk_v13",
+    host_supported: false,
+    srcs: [
+        "panvk_vX_blend.c",
+        "panvk_vX_buffer_view.c",
+        "panvk_vX_cmd_fb_preload.c",
+        "panvk_vX_cmd_desc_state.c",
+        "panvk_vX_cmd_dispatch.c",
+        "panvk_vX_cmd_draw.c",
+        "panvk_vX_cmd_meta.c",
+        "panvk_vX_cmd_push_constant.c",
+        "panvk_vX_descriptor_set.c",
+        "panvk_vX_descriptor_set_layout.c",
+        "panvk_vX_device.c",
+        "panvk_vX_physical_device.c",
+        "panvk_vX_precomp_cache.c",
+        "panvk_vX_query_pool.c",
+        "panvk_vX_image_view.c",
+        "panvk_vX_nir_lower_descriptors.c",
+        "panvk_vX_sampler.c",
+        "panvk_vX_shader.c",
+        "csf/panvk_vX_bind_queue.c",
+        "csf/panvk_vX_cmd_buffer.c",
+        "csf/panvk_vX_cmd_dispatch.c",
+        "csf/panvk_vX_cmd_draw.c",
+        "csf/panvk_vX_cmd_event.c",
+        "csf/panvk_vX_cmd_query.c",
+        "csf/panvk_vX_cmd_precomp.c",
+        "csf/panvk_vX_event.c",
+        "csf/panvk_vX_exception_handler.c",
+        "csf/panvk_vX_gpu_queue.c",
+        "csf/panvk_vX_instr.c",
+        "csf/panvk_vX_utrace.c",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "libpan_shaders_v13.h_header",
+        "libpan_v13.cpp_header",
+    ],
+    generated_sources: [
+        "libpan_shaders_v13.h_impl",
+        "libpan_v13.cpp_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panvk_v13_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panvk_v6",
+    host_supported: false,
+    srcs: [
+        "panvk_vX_blend.c",
+        "panvk_vX_buffer_view.c",
+        "panvk_vX_cmd_fb_preload.c",
+        "panvk_vX_cmd_desc_state.c",
+        "panvk_vX_cmd_dispatch.c",
+        "panvk_vX_cmd_draw.c",
+        "panvk_vX_cmd_meta.c",
+        "panvk_vX_cmd_push_constant.c",
+        "panvk_vX_descriptor_set.c",
+        "panvk_vX_descriptor_set_layout.c",
+        "panvk_vX_device.c",
+        "panvk_vX_physical_device.c",
+        "panvk_vX_precomp_cache.c",
+        "panvk_vX_query_pool.c",
+        "panvk_vX_image_view.c",
+        "panvk_vX_nir_lower_descriptors.c",
+        "panvk_vX_sampler.c",
+        "panvk_vX_shader.c",
+        "bifrost/panvk_vX_meta_desc_copy.c",
+        "jm/panvk_vX_bind_queue.c",
+        "jm/panvk_vX_cmd_buffer.c",
+        "jm/panvk_vX_cmd_dispatch.c",
+        "jm/panvk_vX_cmd_draw.c",
+        "jm/panvk_vX_cmd_event.c",
+        "jm/panvk_vX_cmd_query.c",
+        "jm/panvk_vX_cmd_precomp.c",
+        "jm/panvk_vX_event.c",
+        "jm/panvk_vX_gpu_queue.c",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "libpan_shaders_v6.h_header",
+        "libpan_v6.cpp_header",
+    ],
+    generated_sources: [
+        "libpan_shaders_v6.h_impl",
+        "libpan_v6.cpp_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panvk_v6_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panvk_v7",
+    host_supported: false,
+    srcs: [
+        "panvk_vX_blend.c",
+        "panvk_vX_buffer_view.c",
+        "panvk_vX_cmd_fb_preload.c",
+        "panvk_vX_cmd_desc_state.c",
+        "panvk_vX_cmd_dispatch.c",
+        "panvk_vX_cmd_draw.c",
+        "panvk_vX_cmd_meta.c",
+        "panvk_vX_cmd_push_constant.c",
+        "panvk_vX_descriptor_set.c",
+        "panvk_vX_descriptor_set_layout.c",
+        "panvk_vX_device.c",
+        "panvk_vX_physical_device.c",
+        "panvk_vX_precomp_cache.c",
+        "panvk_vX_query_pool.c",
+        "panvk_vX_image_view.c",
+        "panvk_vX_nir_lower_descriptors.c",
+        "panvk_vX_sampler.c",
+        "panvk_vX_shader.c",
+        "bifrost/panvk_vX_meta_desc_copy.c",
+        "jm/panvk_vX_bind_queue.c",
+        "jm/panvk_vX_cmd_buffer.c",
+        "jm/panvk_vX_cmd_dispatch.c",
+        "jm/panvk_vX_cmd_draw.c",
+        "jm/panvk_vX_cmd_event.c",
+        "jm/panvk_vX_cmd_query.c",
+        "jm/panvk_vX_cmd_precomp.c",
+        "jm/panvk_vX_event.c",
+        "jm/panvk_vX_gpu_queue.c",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "libpan_shaders_v7.h_header",
+        "libpan_v7.cpp_header",
+    ],
+    generated_sources: [
+        "libpan_shaders_v7.h_impl",
+        "libpan_v7.cpp_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panvk_v7_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_shared {
+    name: "vulkan_panfrost",
+    host_supported: false,
+    srcs: [
+        "panvk_buffer.c",
+        "panvk_cmd_pool.c",
+        "panvk_device.c",
+        "panvk_device_memory.c",
+        "panvk_host_copy.c",
+        "panvk_image.c",
+        "panvk_instance.c",
+        "panvk_mempool.c",
+        "panvk_physical_device.c",
+        "panvk_priv_bo.c",
+        "panvk_utrace.c",
+        "panvk_wsi.c",
+        "panvk_android.c",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "panvk_entrypoints.[ch]_header",
+        "panvk_tracepoints.[ch]_header",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+    ],
+    generated_sources: [
+        "panvk_entrypoints.[ch]_impl",
+        "panvk_tracepoints.[ch]_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "vulkan_panfrost_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "panfrost_shared",
+        "panfrost_midgard",
+        "panfrost_bifrost",
+        "panfrost_decode",
+        "panfrost_lib",
+        "panfrost_util",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+        "vulkan_util",
+    ],
+    whole_static_libs: [
+        "panvk_v6",
+        "panvk_v7",
+        "panvk_v10",
+        "panvk_v12",
+        "panvk_v13",
+        "vulkan_lite_runtime",
+        "vulkan_runtime",
+        "vulkan_instance",
+        "vulkan_wsi",
+    ],
+    shared_libs: [
+        "elf",
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

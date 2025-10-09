@@ -1,0 +1,151 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+filegroup {
+    name: "astc_decoder_glsl",
+    srcs: ["glsl/astc_decoder.glsl"],
+}
+
+python_binary_host {
+    name: "builtin_types_c_gen",
+    main: "builtin_types_c.py",
+    srcs: [
+        "builtin_types.py",
+        "builtin_types_c.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "builtin_types_h_gen",
+    main: "builtin_types_h.py",
+    srcs: [
+        "builtin_types.py",
+        "builtin_types_h.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "ir_expression_operation_gen",
+    main: "ir_expression_operation.py",
+    srcs: [
+        "ir_expression_operation.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "builtin_types.c",
+  srcs: [
+  ],
+  out: [
+    "builtin_types.c",
+  ],
+  tools: [
+    "builtin_types_c_gen",
+  ],
+  cmd: "python3 $(location builtin_types_c_gen) $(location builtin_types.c)",
+}
+
+genrule {
+  name: "builtin_types.h",
+  srcs: [
+  ],
+  out: [
+    "builtin_types.h",
+  ],
+  tools: [
+    "builtin_types_h_gen",
+  ],
+  cmd: "python3 $(location builtin_types_h_gen) $(location builtin_types.h)",
+}
+
+genrule {
+  name: "ir_expression_operation.h",
+  srcs: [
+  ],
+  out: [
+    "ir_expression_operation.h",
+  ],
+  tools: [
+    "ir_expression_operation_gen",
+  ],
+  cmd: "python3 $(location ir_expression_operation_gen) enum &> $(location" + 
+        "ir_expression_operation.h)",
+}
+
+cc_library_headers {
+    name: "inc_compiler",
+    export_include_dirs: [
+        ".",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_glsl",
+    export_include_dirs: [
+        "glsl",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_spirv",
+    export_include_dirs: [
+        "spirv",
+    ],
+}
+
+cc_defaults {
+    name: "compiler_c_flags",
+    cflags: [
+        "-Werror=pointer-arith",
+        "-Werror=vla",
+        "-Werror=gnu-empty-initializer",
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "compiler",
+    host_supported: false,
+    srcs: [
+        "glsl_types.c",
+        "shader_enums.c",
+    ],
+    generated_headers: [
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    generated_sources: [
+        "builtin_types.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "compiler_c_flags",
+        "_trial_msvc",
+    ],
+    header_libs: [
+        "inc_compiler",
+        "inc_src",
+    ]
+    
+}
+

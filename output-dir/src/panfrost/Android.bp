@@ -1,0 +1,23 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_library_headers {
+    name: "inc_panfrost",
+    export_include_dirs: [
+        ".",
+        "compiler",
+        "lib",
+        "libpan",
+        "midgard",
+        "model",
+        "shared",
+    ],
+}
+

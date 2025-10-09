@@ -1,0 +1,95 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "lvp_devenv_icd",
+  srcs: [
+    ":vk_icd_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "lvp_devenv_icd.aarch64.json",
+  ],
+  tools: [
+    "vk_icd_gen_gen",
+  ],
+  cmd: "python3 $(location vk_icd_gen_gen) --api-version 1.4 --xml $(location" + 
+        "registry/vk.xml) --sizeof-pointer 0 --lib-path" + 
+        "/tmp/tmpx1uwqcvq/src/gallium/targets/lavapipe/libvulkan_lvp.so --out $(location" + 
+        "lvp_devenv_icd.aarch64.json)",
+}
+
+genrule {
+  name: "lvp_icd",
+  srcs: [
+    ":vk_icd_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "lvp_icd.aarch64.json",
+  ],
+  tools: [
+    "vk_icd_gen_gen",
+  ],
+  cmd: "python3 $(location vk_icd_gen_gen) --api-version 1.4 --xml $(location" + 
+        "registry/vk.xml) --sizeof-pointer 0 --lib-path /usr/local/lib/x86_64-linux-" + 
+        "gnu/libvulkan_lvp.so --out $(location lvp_icd.aarch64.json)",
+}
+
+cc_library_shared {
+    name: "vulkan_lvp",
+    host_supported: false,
+    srcs: [
+        "lavapipe_target.c",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    static_libs: [
+        "libsync",
+        "pipe_loader_static",
+        "gallium",
+        "wsw",
+        "ws_null",
+        "llvmpipe",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    whole_static_libs: [
+        "lavapipe_st",
+    ],
+    shared_libs: [
+        "libLLVM16_swiftshader",
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_gallium",
+        "inc_gallium_aux",
+        "inc_gallium_winsys",
+        "inc_gallium_drivers",
+    ]
+    
+}
+

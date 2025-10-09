@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "panfrost_util_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "panfrost_util",
+    host_supported: false,
+    srcs: [
+        "pan_collect_varyings.c",
+        "pan_ir.c",
+        "pan_lower_frag_coord_zw.c",
+        "pan_lower_framebuffer.c",
+        "pan_lower_helper_invocation.c",
+        "pan_lower_image_index.c",
+        "pan_lower_image_ms.c",
+        "pan_lower_noperspective.c",
+        "pan_lower_sample_position.c",
+        "pan_lower_store_component.c",
+        "pan_lower_vertex_id.c",
+        "pan_lower_writeout.c",
+        "pan_lower_xfb.c",
+    ],
+    generated_headers: [
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_util_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

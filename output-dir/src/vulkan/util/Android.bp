@@ -1,0 +1,271 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+filegroup {
+    name: "vk_entrypoints_gen_py",
+    srcs: ["vk_entrypoints_gen.py"],
+}
+
+filegroup {
+    name: "vk_cmd_queue_gen_py",
+    srcs: ["vk_cmd_queue_gen.py"],
+}
+
+filegroup {
+    name: "vk_dispatch_trampolines_gen_py",
+    srcs: ["vk_dispatch_trampolines_gen.py"],
+}
+
+filegroup {
+    name: "vk_physical_device_features_gen_py",
+    srcs: ["vk_physical_device_features_gen.py"],
+}
+
+filegroup {
+    name: "vk_physical_device_properties_gen_py",
+    srcs: ["vk_physical_device_properties_gen.py"],
+}
+
+filegroup {
+    name: "vk_physical_device_spirv_caps_gen_py",
+    srcs: ["vk_physical_device_spirv_caps_gen.py"],
+}
+
+filegroup {
+    name: "vk_synchronization_helpers_gen_py",
+    srcs: ["vk_synchronization_helpers_gen.py"],
+}
+
+filegroup {
+    name: "vk_icd_gen_py",
+    srcs: ["vk_icd_gen.py"],
+}
+
+python_binary_host {
+    name: "gen_enum_to_str_gen",
+    main: "gen_enum_to_str.py",
+    srcs: [
+        "gen_enum_to_str.py",
+        "vk_extensions.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_dispatch_table_gen_gen",
+    main: "vk_dispatch_table_gen.py",
+    srcs: [
+        "vk_dispatch_table_gen.py",
+        "vk_entrypoints.py",
+        "vk_extensions.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_extensions_gen_gen",
+    main: "vk_extensions_gen.py",
+    srcs: [
+        "vk_extensions.py",
+        "vk_extensions_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_struct_type_cast_gen_gen",
+    main: "vk_struct_type_cast_gen.py",
+    srcs: [
+        "vk_extensions.py",
+        "vk_struct_type_cast_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "vk_dispatch_table_header",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_dispatch_table.h",
+  ],
+  tools: [
+    "vk_dispatch_table_gen_gen",
+  ],
+  cmd: "python3 $(location vk_dispatch_table_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c "$(genDir)/placeholder.c" --out-h $(location vk_dispatch_table.h) --beta" + 
+        "false",
+}
+
+genrule {
+  name: "vk_dispatch_table_impl",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_dispatch_table.c",
+  ],
+  tools: [
+    "vk_dispatch_table_gen_gen",
+  ],
+  cmd: "python3 $(location vk_dispatch_table_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c $(location vk_dispatch_table.c) --out-h "$(genDir)/vk_dispatch_table.h"" + 
+        "--beta false",
+}
+
+genrule {
+  name: "vk_enum_to_str_header",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_enum_to_str.h",
+    "vk_enum_defines.h",
+  ],
+  tools: [
+    "gen_enum_to_str_gen",
+  ],
+  cmd: "python3 $(location gen_enum_to_str_gen) --xml $(location registry/vk.xml)" + 
+        "--outdir $(genDir) --beta false",
+}
+
+genrule {
+  name: "vk_enum_to_str_impl",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_enum_to_str.c",
+  ],
+  tools: [
+    "gen_enum_to_str_gen",
+  ],
+  cmd: "python3 $(location gen_enum_to_str_gen) --xml $(location registry/vk.xml)" + 
+        "--outdir $(genDir) --beta false",
+}
+
+genrule {
+  name: "vk_extensions_header",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_extensions.h",
+  ],
+  tools: [
+    "vk_extensions_gen_gen",
+  ],
+  cmd: "python3 $(location vk_extensions_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c "$(genDir)/placeholder.c" --out-h $(location vk_extensions.h)",
+}
+
+genrule {
+  name: "vk_extensions_impl",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_extensions.c",
+  ],
+  tools: [
+    "vk_extensions_gen_gen",
+  ],
+  cmd: "python3 $(location vk_extensions_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c $(location vk_extensions.c) --out-h "$(genDir)/vk_extensions.h"",
+}
+
+genrule {
+  name: "vk_struct_type_cast",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_struct_type_cast.h",
+  ],
+  tools: [
+    "vk_struct_type_cast_gen_gen",
+  ],
+  cmd: "python3 $(location vk_struct_type_cast_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --outdir $(genDir) --beta false",
+}
+
+cc_library_static {
+    name: "vulkan_util",
+    host_supported: false,
+    srcs: [
+        "vk_alloc.c",
+        "vk_format.c",
+        "vk_util.c",
+    ],
+    generated_headers: [
+        "vk_dispatch_table_header",
+        "vk_enum_to_str_header",
+        "vk_struct_type_cast",
+        "vk_extensions_header",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    generated_sources: [
+        "vk_dispatch_table_impl",
+        "vk_enum_to_str_impl",
+        "vk_extensions_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

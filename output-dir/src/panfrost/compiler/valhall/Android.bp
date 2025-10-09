@@ -1,0 +1,119 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "disasm_gen",
+    main: "disasm.py",
+    srcs: [
+        "disasm.py",
+        "valhall.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "valhall.c_gen",
+    main: "valhall.c.py",
+    srcs: [
+        "valhall.c.py",
+        "valhall.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "valhall_enums.h_gen",
+    main: "valhall_enums.h.py",
+    srcs: [
+        "valhall.py",
+        "valhall_enums.h.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "valhall_c",
+  srcs: [
+    "ISA.xml",
+  ],
+  out: [
+    "valhall.c",
+  ],
+  tools: [
+    "valhall.c_gen",
+  ],
+  cmd: "python3 $(location valhall.c_gen) $(location ISA.xml) &> $(location valhall.c)",
+}
+
+genrule {
+  name: "valhall_disasm_c",
+  srcs: [
+    "ISA.xml",
+  ],
+  out: [
+    "valhall_disasm.c",
+  ],
+  tools: [
+    "disasm_gen",
+  ],
+  cmd: "python3 $(location disasm_gen) $(location ISA.xml) &> $(location" + 
+        "valhall_disasm.c)",
+}
+
+genrule {
+  name: "valhall_enums.h",
+  srcs: [
+    "ISA.xml",
+  ],
+  out: [
+    "valhall_enums.h",
+  ],
+  tools: [
+    "valhall_enums.h_gen",
+  ],
+  cmd: "python3 $(location valhall_enums.h_gen) $(location ISA.xml) &> $(location" + 
+        "valhall_enums.h)",
+}
+
+cc_defaults {
+    name: "panfrost_valhall_disasm_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "panfrost_valhall_disasm",
+    host_supported: false,
+    srcs: [
+    ],
+    generated_sources: [
+        "valhall_disasm_c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_valhall_disasm_c_flags",
+    ],
+    header_libs: [
+        "inc_src",
+    ]
+    
+}
+

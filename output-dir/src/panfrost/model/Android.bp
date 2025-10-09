@@ -1,0 +1,37 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "panfrost_model_lib_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "panfrost_model_lib",
+    host_supported: false,
+    srcs: [
+        "pan_model.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_model_lib_c_flags",
+    ],
+    header_libs: [
+        "inc_src",
+    ]
+    
+}
+

@@ -1,0 +1,758 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "a2xx.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a2xx.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a2xx.xml) py-defines &> $(location a2xx.py)",
+}
+
+genrule {
+  name: "a2xx.xml.gz",
+  srcs: [
+    "a2xx.xml",
+  ],
+  out: [
+    "a2xx.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a2xx.xml) &> $(location a2xx.xml.gz)",
+}
+
+genrule {
+  name: "a2xx.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a2xx.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a2xx.xml) c-defines &> $(location a2xx.xml.h)",
+}
+
+genrule {
+  name: "a3xx.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a3xx.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a3xx.xml) py-defines &> $(location a3xx.py)",
+}
+
+genrule {
+  name: "a3xx.xml.gz",
+  srcs: [
+    "a3xx.xml",
+  ],
+  out: [
+    "a3xx.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a3xx.xml) &> $(location a3xx.xml.gz)",
+}
+
+genrule {
+  name: "a3xx.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a3xx.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a3xx.xml) c-defines &> $(location a3xx.xml.h)",
+}
+
+genrule {
+  name: "a4xx.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a4xx.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a4xx.xml) py-defines &> $(location a4xx.py)",
+}
+
+genrule {
+  name: "a4xx.xml.gz",
+  srcs: [
+    "a4xx.xml",
+  ],
+  out: [
+    "a4xx.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a4xx.xml) &> $(location a4xx.xml.gz)",
+}
+
+genrule {
+  name: "a4xx.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a4xx.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a4xx.xml) c-defines &> $(location a4xx.xml.h)",
+}
+
+genrule {
+  name: "a5xx.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a5xx.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a5xx.xml) py-defines &> $(location a5xx.py)",
+}
+
+genrule {
+  name: "a5xx.xml.gz",
+  srcs: [
+    "a5xx.xml",
+  ],
+  out: [
+    "a5xx.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a5xx.xml) &> $(location a5xx.xml.gz)",
+}
+
+genrule {
+  name: "a5xx.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a5xx.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a5xx.xml) c-defines &> $(location a5xx.xml.h)",
+}
+
+genrule {
+  name: "a6xx-pack.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx-pack.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx.xml) c-pack-structs &> $(location a6xx-pack.xml.h)",
+}
+
+genrule {
+  name: "a6xx.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx.xml) py-defines &> $(location a6xx.py)",
+}
+
+genrule {
+  name: "a6xx.xml.gz",
+  srcs: [
+    "a6xx.xml",
+  ],
+  out: [
+    "a6xx.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a6xx.xml) &> $(location a6xx.xml.gz)",
+}
+
+genrule {
+  name: "a6xx.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx.xml) c-defines &> $(location a6xx.xml.h)",
+}
+
+genrule {
+  name: "a6xx_descriptors.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_descriptors.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_descriptors.xml) py-defines &> $(location" + 
+        "a6xx_descriptors.py)",
+}
+
+genrule {
+  name: "a6xx_descriptors.xml.gz",
+  srcs: [
+    "a6xx_descriptors.xml",
+  ],
+  out: [
+    "a6xx_descriptors.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a6xx_descriptors.xml) &> $(location a6xx_descriptors.xml.gz)",
+}
+
+genrule {
+  name: "a6xx_descriptors.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_descriptors.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_descriptors.xml) c-defines &> $(location" + 
+        "a6xx_descriptors.xml.h)",
+}
+
+genrule {
+  name: "a6xx_enums.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_enums.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_enums.xml) py-defines &> $(location a6xx_enums.py)",
+}
+
+genrule {
+  name: "a6xx_enums.xml.gz",
+  srcs: [
+    "a6xx_enums.xml",
+  ],
+  out: [
+    "a6xx_enums.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a6xx_enums.xml) &> $(location a6xx_enums.xml.gz)",
+}
+
+genrule {
+  name: "a6xx_enums.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_enums.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_enums.xml) c-defines &> $(location a6xx_enums.xml.h)",
+}
+
+genrule {
+  name: "a6xx_gmu.xml.gz",
+  srcs: [
+    "a6xx_gmu.xml",
+  ],
+  out: [
+    "a6xx_gmu.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a6xx_gmu.xml) &> $(location a6xx_gmu.xml.gz)",
+}
+
+genrule {
+  name: "a6xx_gmu.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_gmu.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_gmu.xml) c-defines &> $(location a6xx_gmu.xml.h)",
+}
+
+genrule {
+  name: "a6xx_perfcntrs.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_perfcntrs.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_perfcntrs.xml) py-defines &> $(location a6xx_perfcntrs.py)",
+}
+
+genrule {
+  name: "a6xx_perfcntrs.xml.gz",
+  srcs: [
+    "a6xx_perfcntrs.xml",
+  ],
+  out: [
+    "a6xx_perfcntrs.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a6xx_perfcntrs.xml) &> $(location a6xx_perfcntrs.xml.gz)",
+}
+
+genrule {
+  name: "a6xx_perfcntrs.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a6xx_perfcntrs.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a6xx_perfcntrs.xml) c-defines &> $(location" + 
+        "a6xx_perfcntrs.xml.h)",
+}
+
+genrule {
+  name: "a7xx_enums.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a7xx_enums.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a7xx_enums.xml) py-defines &> $(location a7xx_enums.py)",
+}
+
+genrule {
+  name: "a7xx_enums.xml.gz",
+  srcs: [
+    "a7xx_enums.xml",
+  ],
+  out: [
+    "a7xx_enums.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a7xx_enums.xml) &> $(location a7xx_enums.xml.gz)",
+}
+
+genrule {
+  name: "a7xx_enums.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a7xx_enums.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a7xx_enums.xml) c-defines &> $(location a7xx_enums.xml.h)",
+}
+
+genrule {
+  name: "a7xx_perfcntrs.py",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a7xx_perfcntrs.py",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a7xx_perfcntrs.xml) py-defines &> $(location a7xx_perfcntrs.py)",
+}
+
+genrule {
+  name: "a7xx_perfcntrs.xml.gz",
+  srcs: [
+    "a7xx_perfcntrs.xml",
+  ],
+  out: [
+    "a7xx_perfcntrs.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location a7xx_perfcntrs.xml) &> $(location a7xx_perfcntrs.xml.gz)",
+}
+
+genrule {
+  name: "a7xx_perfcntrs.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "a7xx_perfcntrs.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location a7xx_perfcntrs.xml) c-defines &> $(location" + 
+        "a7xx_perfcntrs.xml.h)",
+}
+
+genrule {
+  name: "adreno-pm4-pack.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "adreno-pm4-pack.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location adreno_pm4.xml) c-pack-structs &> $(location adreno-" + 
+        "pm4-pack.xml.h)",
+}
+
+genrule {
+  name: "adreno_common.xml.gz",
+  srcs: [
+    "adreno_common.xml",
+  ],
+  out: [
+    "adreno_common.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location adreno_common.xml) &> $(location adreno_common.xml.gz)",
+}
+
+genrule {
+  name: "adreno_common.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "adreno_common.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location adreno_common.xml) c-defines &> $(location adreno_common.xml.h)",
+}
+
+genrule {
+  name: "adreno_control_regs.xml.gz",
+  srcs: [
+    "adreno_control_regs.xml",
+  ],
+  out: [
+    "adreno_control_regs.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location adreno_control_regs.xml) &> $(location" + 
+        "adreno_control_regs.xml.gz)",
+}
+
+genrule {
+  name: "adreno_control_regs.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "adreno_control_regs.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location adreno_control_regs.xml) c-defines &> $(location" + 
+        "adreno_control_regs.xml.h)",
+}
+
+genrule {
+  name: "adreno_pipe_regs.xml.gz",
+  srcs: [
+    "adreno_pipe_regs.xml",
+  ],
+  out: [
+    "adreno_pipe_regs.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location adreno_pipe_regs.xml) &> $(location adreno_pipe_regs.xml.gz)",
+}
+
+genrule {
+  name: "adreno_pipe_regs.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "adreno_pipe_regs.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location adreno_pipe_regs.xml) c-defines &> $(location" + 
+        "adreno_pipe_regs.xml.h)",
+}
+
+genrule {
+  name: "adreno_pm4.xml.gz",
+  srcs: [
+    "adreno_pm4.xml",
+  ],
+  out: [
+    "adreno_pm4.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location adreno_pm4.xml) &> $(location adreno_pm4.xml.gz)",
+}
+
+genrule {
+  name: "adreno_pm4.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "adreno_pm4.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location adreno_pm4.xml) c-defines &> $(location adreno_pm4.xml.h)",
+}
+
+genrule {
+  name: "ocmem.xml.gz",
+  srcs: [
+    "ocmem.xml",
+  ],
+  out: [
+    "ocmem.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location ocmem.xml) &> $(location ocmem.xml.gz)",
+}
+
+genrule {
+  name: "ocmem.xml.h",
+  srcs: [
+    ":gen_header_py",
+    "rules-fd.xsd",
+    ":rules-fd_xsd",
+    ":freedreno_copyright_xml",
+  ],
+  out: [
+    "ocmem.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location ocmem.xml) c-defines &> $(location ocmem.xml.h)",
+}
+

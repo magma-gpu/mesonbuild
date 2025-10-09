@@ -1,0 +1,49 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "platform_virtgpu_kumquat_cpp_flags",
+    cppflags: [
+        "-D_FILE_OFFSET_BITS=64",
+        "-DLINUX_GUEST_BUILD",
+        "-DVK_GFXSTREAM_STRUCTURE_TYPE_EXT",
+    ],
+}
+
+cc_library_static {
+    name: "platform_virtgpu_kumquat",
+    host_supported: false,
+    srcs: [
+        "VirtGpuKumquatDevice.cpp",
+        "VirtGpuKumquatBlobMapping.cpp",
+        "VirtGpuKumquatBlob.cpp",
+        "VirtGpuKumquatSync.cpp",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "platform_virtgpu_kumquat_cpp_flags",
+    ],
+    static_libs: [
+        "virtgpu_kumquat_ffi",
+        "gfxstream_vulkan_mapper",
+    ],
+    header_libs: [
+        "inc_platform_virtgpu",
+        "inc_src",
+        "inc_vulkan_util",
+        "inc_virtgpu_kumquat_ffi",
+        "inc_gfxstream_vulkan_mapper",
+    ]
+    
+}
+

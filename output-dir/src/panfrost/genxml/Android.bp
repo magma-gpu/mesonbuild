@@ -1,0 +1,764 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "gen_pack_gen",
+    main: "gen_pack.py",
+    srcs: [
+        "gen_pack.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "common_pack.h",
+  srcs: [
+    "common.xml",
+  ],
+  out: [
+    "common_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location common.xml) &> $(location" + 
+        "common_pack.h)",
+}
+
+genrule {
+  name: "v10_pack.h",
+  srcs: [
+    "v10.xml",
+  ],
+  out: [
+    "v10_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v10.xml) &> $(location v10_pack.h)",
+}
+
+genrule {
+  name: "v12_pack.h",
+  srcs: [
+    "v12.xml",
+  ],
+  out: [
+    "v12_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v12.xml) &> $(location v12_pack.h)",
+}
+
+genrule {
+  name: "v13_pack.h",
+  srcs: [
+    "v13.xml",
+  ],
+  out: [
+    "v13_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v13.xml) &> $(location v13_pack.h)",
+}
+
+genrule {
+  name: "v4_pack.h",
+  srcs: [
+    "v4.xml",
+  ],
+  out: [
+    "v4_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v4.xml) &> $(location v4_pack.h)",
+}
+
+genrule {
+  name: "v5_pack.h",
+  srcs: [
+    "v5.xml",
+  ],
+  out: [
+    "v5_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v5.xml) &> $(location v5_pack.h)",
+}
+
+genrule {
+  name: "v6_pack.h",
+  srcs: [
+    "v6.xml",
+  ],
+  out: [
+    "v6_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v6.xml) &> $(location v6_pack.h)",
+}
+
+genrule {
+  name: "v7_pack.h",
+  srcs: [
+    "v7.xml",
+  ],
+  out: [
+    "v7_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v7.xml) &> $(location v7_pack.h)",
+}
+
+genrule {
+  name: "v9_pack.h",
+  srcs: [
+    "v9.xml",
+  ],
+  out: [
+    "v9_pack.h",
+  ],
+  tools: [
+    "gen_pack_gen",
+  ],
+  cmd: "python3 $(location gen_pack_gen) $(location v9.xml) &> $(location v9_pack.h)",
+}
+
+cc_defaults {
+    name: "pandecode-arch-v10_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=10",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v12_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=12",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v13_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=13",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v4_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=4",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v5_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=5",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v6_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=6",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v7_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=7",
+    ],
+}
+
+cc_defaults {
+    name: "pandecode-arch-v9_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+        "-DPAN_ARCH=9",
+    ],
+}
+
+cc_defaults {
+    name: "panfrost_decode_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "pandecode-arch-v10",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v10_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v12",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v12_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v13",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v13_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v4",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v4_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v5",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v5_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v6",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v6_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v7",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v7_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pandecode-arch-v9",
+    host_supported: false,
+    srcs: [
+        "decode.c",
+        "decode_jm.c",
+        "decode_csf.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pandecode-arch-v9_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panfrost_decode",
+    host_supported: false,
+    srcs: [
+        "decode_common.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_decode_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "pandecode-arch-v4",
+        "pandecode-arch-v5",
+        "pandecode-arch-v6",
+        "pandecode-arch-v7",
+        "pandecode-arch-v9",
+        "pandecode-arch-v10",
+        "pandecode-arch-v12",
+        "pandecode-arch-v13",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+

@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_library_headers {
+    name: "inc_aemu",
+    export_include_dirs: [
+        "include",
+    ],
+}
+
+cc_library_static {
+    name: "aemu",
+    host_supported: false,
+    srcs: [
+        "ring_buffer.cpp",
+        "Stream.cpp",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    header_libs: [
+        "inc_aemu",
+    ]
+    
+}
+

@@ -1,0 +1,49 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+filegroup {
+    name: "vk_xml",
+    srcs: ["registry/vk.xml"],
+}
+
+python_binary_host {
+    name: "gen_vs_module_defs_gen",
+    main: "gen_vs_module_defs.py",
+    srcs: [
+        "gen_vs_module_defs.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "vulkan_api.def",
+  srcs: [
+    "vulkan_api.def.in",
+  ],
+  out: [
+    "vulkan_api.def",
+  ],
+  tools: [
+    "gen_vs_module_defs_gen",
+  ],
+  cmd: "python3 $(location gen_vs_module_defs_gen) --in_file $(location" + 
+        "vulkan_api.def.in) --out_file $(location vulkan_api.def) --compiler_abi gcc" + 
+        "--compiler_id clang --cpu_family aarch64",
+}
+
+cc_library_headers {
+    name: "inc_vulkan_util",
+    export_include_dirs: [
+        "util",
+    ],
+}
+

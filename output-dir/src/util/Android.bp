@@ -1,0 +1,293 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "driconf_static_gen",
+    main: "driconf_static.py",
+    srcs: [
+        "driconf_static.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "format_srgb_gen",
+    main: "format_srgb.py",
+    srcs: [
+        "format_srgb.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "process_shader_stats_gen",
+    main: "process_shader_stats.py",
+    srcs: [
+        "process_shader_stats.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "driconf_static.h",
+  srcs: [
+    "00-mesa-defaults.conf",
+  ],
+  out: [
+    "driconf_static.h",
+  ],
+  tools: [
+    "driconf_static_gen",
+  ],
+  cmd: "python3 $(location driconf_static_gen) $(location 00-mesa-defaults.conf)" + 
+        "$(location driconf_static.h)",
+}
+
+genrule {
+  name: "format_srgb",
+  srcs: [
+  ],
+  out: [
+    "format_srgb.c",
+  ],
+  tools: [
+    "format_srgb_gen",
+  ],
+  cmd: "python3 $(location format_srgb_gen) &> $(location format_srgb.c)",
+}
+
+genrule {
+  name: "shader_stats.h",
+  srcs: [
+    "shader_stats.rnc",
+    "shader_stats.xml",
+  ],
+  out: [
+    "shader_stats.h",
+  ],
+  tools: [
+    "process_shader_stats_gen",
+  ],
+  cmd: "python3 $(location process_shader_stats_gen) $(location shader_stats.rnc)" + 
+        "$(location shader_stats.xml) &> $(location shader_stats.h)",
+}
+
+cc_defaults {
+    name: "xmlconfig_c_flags",
+    cflags: [
+        "-Werror=pointer-arith",
+        "-Werror=vla",
+        "-Werror=gnu-empty-initializer",
+        "-DWITH_XMLCONFIG=0",
+        "-DSYSCONFDIR="/usr/local/etc"",
+        "-DDATADIR="/usr/local/share"",
+    ],
+}
+
+cc_library_static {
+    name: "mesa_util",
+    host_supported: false,
+    srcs: [
+        "anon_file.c",
+        "bitscan.c",
+        "blob.c",
+        "build_id.c",
+        "cnd_monotonic.c",
+        "compress.c",
+        "thread_sched.c",
+        "crc32.c",
+        "dag.c",
+        "disk_cache.c",
+        "disk_cache_os.c",
+        "double.c",
+        "fast_idiv_by_const.c",
+        "float8.c",
+        "fossilize_db.c",
+        "futex.c",
+        "half_float.c",
+        "hash_table.c",
+        "helpers.c",
+        "u_idalloc.c",
+        "log.c",
+        "lut.c",
+        "memstream.c",
+        "mesa-sha1.c",
+        "mesa-blake3.c",
+        "os_time.c",
+        "os_file.c",
+        "os_file_notify.c",
+        "os_memory_fd.c",
+        "os_misc.c",
+        "os_socket.c",
+        "pb_slab.c",
+        "perf/u_trace.c",
+        "u_process.c",
+        "u_qsort.cpp",
+        "rwlock.c",
+        "sha1/sha1.c",
+        "ralloc.c",
+        "rand_xor.c",
+        "range_minimum_query.c",
+        "rb_tree.c",
+        "register_allocate.c",
+        "rgtc.c",
+        "set.c",
+        "simple_mtx.c",
+        "slab.c",
+        "softfloat.c",
+        "sparse_array.c",
+        "string_buffer.c",
+        "strndup.c",
+        "strtod.c",
+        "texcompress_astc_luts.cpp",
+        "texcompress_astc_luts_wrap.cpp",
+        "u_atomic.c",
+        "u_call_once.c",
+        "u_dl.c",
+        "u_dynarray.c",
+        "u_hash_table.c",
+        "u_queue.c",
+        "u_range_remap.c",
+        "u_string.c",
+        "u_thread.c",
+        "u_vector.c",
+        "u_math.c",
+        "u_mm.c",
+        "u_debug.c",
+        "u_debug_memory.c",
+        "u_cpu_detect.c",
+        "u_printf.c",
+        "u_worklist.c",
+        "vl_zscan_data.c",
+        "vma.c",
+        "mesa_cache_db.c",
+        "mesa_cache_db_multipart.c",
+        "u_format.c",
+        "u_format_bptc.c",
+        "u_format_etc.c",
+        "u_format_fxt1.c",
+        "u_format_latc.c",
+        "u_format_other.c",
+        "u_format_rgtc.c",
+        "u_format_s3tc.c",
+        "u_format_tests.c",
+        "u_format_unpack_neon.c",
+        "u_format_yuv.c",
+        "u_format_zs.c",
+        "u_sync_provider.c",
+        "u_debug_stack_android.cpp",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+        "u_format_pack.h",
+    ],
+    generated_sources: [
+        "u_format_table.c",
+        "format_srgb",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util_simd",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    
+}
+
+cc_library_static {
+    name: "mesa_util_simd",
+    host_supported: false,
+    srcs: [
+        "streaming-load-memcpy.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+    ],
+    
+}
+
+cc_library_static {
+    name: "parson",
+    host_supported: false,
+    srcs: [
+        "parson.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    
+}
+
+cc_library_static {
+    name: "xmlconfig",
+    host_supported: false,
+    srcs: [
+        "xmlconfig.c",
+    ],
+    generated_headers: [
+        "driconf_static.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "xmlconfig_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    
+}
+

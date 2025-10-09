@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_library_headers {
+    name: "inc_virtgpu_kumquat_ffi",
+    export_include_dirs: [
+        "include",
+    ],
+}
+
+rust_ffi_static {
+    name: "virtgpu_kumquat_ffi",
+    host_supported: false,
+    crate_name: "virtgpu_kumquat_ffi",
+    cargo_env_compat: true,
+    cargo_pkg_version: "0.1.0",
+    crate_root: "lib.rs",
+    srcs: [
+        "lib.rs",
+    ],
+    edition: "2021",
+    rustlibs: [
+        "libthiserror",
+        "libzerocopy",
+        "mesa3d_protocols",
+        "mesa3d_util",
+        "virtgpu_kumquat",
+    ],
+}

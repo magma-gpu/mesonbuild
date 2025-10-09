@@ -1,0 +1,94 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+filegroup {
+    name: "gen_header_py",
+    srcs: ["gen_header.py"],
+}
+
+filegroup {
+    name: "rules-fd_xsd",
+    srcs: ["rules-fd.xsd"],
+}
+
+filegroup {
+    name: "freedreno_copyright_xml",
+    srcs: ["freedreno_copyright.xml"],
+}
+
+python_binary_host {
+    name: "gen_header_gen",
+    main: "gen_header.py",
+    srcs: [
+        "gen_header.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "adreno.xml.gz",
+  srcs: [
+    "adreno.xml",
+  ],
+  out: [
+    "adreno.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location adreno.xml) &> $(location adreno.xml.gz)",
+}
+
+genrule {
+  name: "adreno.xml.h",
+  srcs: [
+    "adreno.xml",
+    "rules-fd.xsd",
+    "freedreno_copyright.xml",
+  ],
+  out: [
+    "adreno.xml.h",
+  ],
+  tools: [
+    "gen_header_gen",
+  ],
+  cmd: "python3 $(location gen_header_gen) --validate --rnn" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa//src/freedreno/registers" + 
+        "--xml $(location adreno.xml) c-defines &> $(location adreno.xml.h)",
+}
+
+genrule {
+  name: "freedreno_copyright.xml.gz",
+  srcs: [
+    "freedreno_copyright.xml",
+  ],
+  out: [
+    "freedreno_copyright.xml.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location freedreno_copyright.xml) &> $(location" + 
+        "freedreno_copyright.xml.gz)",
+}
+
+genrule {
+  name: "rules-fd.xsd.gz",
+  srcs: [
+    "rules-fd.xsd",
+  ],
+  out: [
+    "rules-fd.xsd.gz",
+  ],
+  tools: [
+  ],
+  cmd: "gzip -kc $(location rules-fd.xsd) &> $(location rules-fd.xsd.gz)",
+}
+

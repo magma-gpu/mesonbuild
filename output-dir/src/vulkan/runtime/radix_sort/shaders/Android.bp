@@ -1,0 +1,126 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "fill.comp.spv.h",
+  srcs: [
+    "fill.comp",
+  ],
+  out: [
+    "fill.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location fill.comp.spv.h)" + 
+        "$(location fill.comp) -DRS_KEYVAL_DWORDS=2 --quiet",
+}
+
+genrule {
+  name: "histogram.comp.spv.h",
+  srcs: [
+    "histogram.comp",
+  ],
+  out: [
+    "histogram.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location histogram.comp.spv.h)" + 
+        "$(location histogram.comp) -DRS_KEYVAL_DWORDS=2 --quiet",
+}
+
+genrule {
+  name: "init.comp.spv.h",
+  srcs: [
+    "init.comp",
+  ],
+  out: [
+    "init.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location init.comp.spv.h)" + 
+        "$(location init.comp) -DRS_KEYVAL_DWORDS=2 --quiet",
+}
+
+genrule {
+  name: "prefix.comp.spv.h",
+  srcs: [
+    "prefix.comp",
+  ],
+  out: [
+    "prefix.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location prefix.comp.spv.h)" + 
+        "$(location prefix.comp) -DRS_KEYVAL_DWORDS=2 --quiet",
+}
+
+genrule {
+  name: "scatter_0_even.comp.spv.h",
+  srcs: [
+    "scatter_0_even.comp",
+  ],
+  out: [
+    "scatter_0_even.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location" + 
+        "scatter_0_even.comp.spv.h) $(location scatter_0_even.comp) -DRS_KEYVAL_DWORDS=2" + 
+        "--quiet",
+}
+
+genrule {
+  name: "scatter_0_odd.comp.spv.h",
+  srcs: [
+    "scatter_0_odd.comp",
+  ],
+  out: [
+    "scatter_0_odd.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location" + 
+        "scatter_0_odd.comp.spv.h) $(location scatter_0_odd.comp) -DRS_KEYVAL_DWORDS=2" + 
+        "--quiet",
+}
+
+genrule {
+  name: "scatter_1_even.comp.spv.h",
+  srcs: [
+    "scatter_1_even.comp",
+  ],
+  out: [
+    "scatter_1_even.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location" + 
+        "scatter_1_even.comp.spv.h) $(location scatter_1_even.comp) -DRS_KEYVAL_DWORDS=2" + 
+        "--quiet",
+}
+
+genrule {
+  name: "scatter_1_odd.comp.spv.h",
+  srcs: [
+    "scatter_1_odd.comp",
+  ],
+  out: [
+    "scatter_1_odd.comp.spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V --target-env spirv1.5 -x -o $(location" + 
+        "scatter_1_odd.comp.spv.h) $(location scatter_1_odd.comp) -DRS_KEYVAL_DWORDS=2" + 
+        "--quiet",
+}
+

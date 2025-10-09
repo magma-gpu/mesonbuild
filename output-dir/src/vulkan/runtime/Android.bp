@@ -1,0 +1,702 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "vk_cmd_queue_gen_gen",
+    main: "vk_cmd_queue_gen.py",
+    srcs: [
+        "vk_cmd_queue_gen.py",
+        "vk_entrypoints.py",
+        "vk_extensions.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_dispatch_trampolines_gen_gen",
+    main: "vk_dispatch_trampolines_gen.py",
+    srcs: [
+        "vk_dispatch_trampolines_gen.py",
+        "vk_entrypoints.py",
+        "vk_extensions.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_entrypoints_gen_gen",
+    main: "vk_entrypoints_gen.py",
+    srcs: [
+        "vk_entrypoints.py",
+        "vk_entrypoints_gen.py",
+        "vk_extensions.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_format_info_gen_gen",
+    main: "vk_format_info_gen.py",
+    srcs: [
+        "vk_format_info_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_physical_device_features_gen_gen",
+    main: "vk_physical_device_features_gen.py",
+    srcs: [
+        "vk_extensions.py",
+        "vk_physical_device_features_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_physical_device_properties_gen_gen",
+    main: "vk_physical_device_properties_gen.py",
+    srcs: [
+        "vk_extensions.py",
+        "vk_physical_device_properties_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_physical_device_spirv_caps_gen_gen",
+    main: "vk_physical_device_spirv_caps_gen.py",
+    srcs: [
+        "vk_extensions.py",
+        "vk_physical_device_features_gen.py",
+        "vk_physical_device_spirv_caps_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vk_synchronization_helpers_gen_gen",
+    main: "vk_synchronization_helpers_gen.py",
+    srcs: [
+        "vk_extensions.py",
+        "vk_synchronization_helpers_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "astc_spv.h",
+  srcs: [
+    ":astc_decoder_glsl",
+  ],
+  out: [
+    "astc_spv.h",
+  ],
+  tools: [
+  ],
+  cmd: "glslangValidator -V -S comp -x -o $(location astc_spv.h) $(location" + 
+        "glsl/astc_decoder.glsl) --quiet --depfile @DEPFILE@",
+}
+
+genrule {
+  name: "vk_cmd_enqueue_entrypoints_header",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_cmd_enqueue_entrypoints.h",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h $(location vk_cmd_enqueue_entrypoints.h) --out-c" + 
+        ""$(genDir)/placeholder.c" --prefix vk_cmd_enqueue --prefix" + 
+        "vk_cmd_enqueue_unless_primary --beta false",
+}
+
+genrule {
+  name: "vk_cmd_enqueue_entrypoints_impl",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_cmd_enqueue_entrypoints.c",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h "$(genDir)/vk_cmd_enqueue_entrypoints.h" --out-c" + 
+        "$(location vk_cmd_enqueue_entrypoints.c) --prefix vk_cmd_enqueue --prefix" + 
+        "vk_cmd_enqueue_unless_primary --beta false",
+}
+
+genrule {
+  name: "vk_cmd_queue_header",
+  srcs: [
+    ":vk_cmd_queue_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_cmd_queue.h",
+  ],
+  tools: [
+    "vk_cmd_queue_gen_gen",
+  ],
+  cmd: "python3 $(location vk_cmd_queue_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c "$(genDir)/placeholder.c" --out-h $(location vk_cmd_queue.h) --beta" + 
+        "false",
+}
+
+genrule {
+  name: "vk_cmd_queue_impl",
+  srcs: [
+    ":vk_cmd_queue_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_cmd_queue.c",
+  ],
+  tools: [
+    "vk_cmd_queue_gen_gen",
+  ],
+  cmd: "python3 $(location vk_cmd_queue_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c $(location vk_cmd_queue.c) --out-h "$(genDir)/vk_cmd_queue.h" --beta" + 
+        "false",
+}
+
+genrule {
+  name: "vk_common_entrypoints_header",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_common_entrypoints.h",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h $(location vk_common_entrypoints.h) --out-c" + 
+        ""$(genDir)/placeholder.c" --prefix vk_common --beta false",
+}
+
+genrule {
+  name: "vk_common_entrypoints_impl",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_common_entrypoints.c",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h "$(genDir)/vk_common_entrypoints.h" --out-c $(location" + 
+        "vk_common_entrypoints.c) --prefix vk_common --beta false",
+}
+
+genrule {
+  name: "vk_dispatch_trampolines_header",
+  srcs: [
+    ":vk_dispatch_trampolines_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_dispatch_trampolines.h",
+  ],
+  tools: [
+    "vk_dispatch_trampolines_gen_gen",
+  ],
+  cmd: "python3 $(location vk_dispatch_trampolines_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c "$(genDir)/placeholder.c" --out-h $(location" + 
+        "vk_dispatch_trampolines.h) --beta false",
+}
+
+genrule {
+  name: "vk_dispatch_trampolines_impl",
+  srcs: [
+    ":vk_dispatch_trampolines_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_dispatch_trampolines.c",
+  ],
+  tools: [
+    "vk_dispatch_trampolines_gen_gen",
+  ],
+  cmd: "python3 $(location vk_dispatch_trampolines_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c $(location vk_dispatch_trampolines.c) --out-h" + 
+        ""$(genDir)/vk_dispatch_trampolines.h" --beta false",
+}
+
+genrule {
+  name: "vk_format_info_header",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_format_info.h",
+  ],
+  tools: [
+    "vk_format_info_gen_gen",
+  ],
+  cmd: "python3 $(location vk_format_info_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c "$(genDir)/placeholder.c" --out-h $(location vk_format_info.h)",
+}
+
+genrule {
+  name: "vk_format_info_impl",
+  srcs: [
+    "registry/vk.xml",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_format_info.c",
+  ],
+  tools: [
+    "vk_format_info_gen_gen",
+  ],
+  cmd: "python3 $(location vk_format_info_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--out-c $(location vk_format_info.c) --out-h "$(genDir)/vk_format_info.h"",
+}
+
+genrule {
+  name: "vk_physical_device_features_header",
+  srcs: [
+    ":vk_physical_device_features_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_physical_device_features.h",
+  ],
+  tools: [
+    "vk_physical_device_features_gen_gen",
+  ],
+  cmd: "python3 $(location vk_physical_device_features_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c "$(genDir)/placeholder.c" --out-h $(location" + 
+        "vk_physical_device_features.h) --beta false",
+}
+
+genrule {
+  name: "vk_physical_device_features_impl",
+  srcs: [
+    ":vk_physical_device_features_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_physical_device_features.c",
+  ],
+  tools: [
+    "vk_physical_device_features_gen_gen",
+  ],
+  cmd: "python3 $(location vk_physical_device_features_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c $(location vk_physical_device_features.c) --out-h" + 
+        ""$(genDir)/vk_physical_device_features.h" --beta false",
+}
+
+genrule {
+  name: "vk_physical_device_properties_header",
+  srcs: [
+    ":vk_physical_device_properties_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_physical_device_properties.h",
+  ],
+  tools: [
+    "vk_physical_device_properties_gen_gen",
+  ],
+  cmd: "python3 $(location vk_physical_device_properties_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c "$(genDir)/placeholder.c" --out-h $(location" + 
+        "vk_physical_device_properties.h) --beta false",
+}
+
+genrule {
+  name: "vk_physical_device_properties_impl",
+  srcs: [
+    ":vk_physical_device_properties_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_physical_device_properties.c",
+  ],
+  tools: [
+    "vk_physical_device_properties_gen_gen",
+  ],
+  cmd: "python3 $(location vk_physical_device_properties_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c $(location vk_physical_device_properties.c) --out-h" + 
+        ""$(genDir)/vk_physical_device_properties.h" --beta false",
+}
+
+genrule {
+  name: "vk_physical_device_spirv_caps",
+  srcs: [
+    ":vk_physical_device_spirv_caps_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_physical_device_spirv_caps.c",
+  ],
+  tools: [
+    "vk_physical_device_spirv_caps_gen_gen",
+  ],
+  cmd: "python3 $(location vk_physical_device_spirv_caps_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c $(location vk_physical_device_spirv_caps.c) --beta" + 
+        "false",
+}
+
+genrule {
+  name: "vk_synchronization_helpers",
+  srcs: [
+    ":vk_synchronization_helpers_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "vk_synchronization_helpers.c",
+  ],
+  tools: [
+    "vk_synchronization_helpers_gen_gen",
+  ],
+  cmd: "python3 $(location vk_synchronization_helpers_gen_gen) --xml $(location" + 
+        "registry/vk.xml) --out-c $(location vk_synchronization_helpers.c) --beta false",
+}
+
+cc_defaults {
+    name: "vulkan_instance_c_flags",
+    cflags: [
+        "-DVK_LITE_RUNTIME_INSTANCE=0",
+        "-Werror=pointer-arith",
+        "-Werror=vla",
+        "-Werror=gnu-empty-initializer",
+    ],
+}
+
+cc_defaults {
+    name: "vulkan_lite_instance_c_flags",
+    cflags: [
+        "-DVK_LITE_RUNTIME_INSTANCE=1",
+        "-Werror=pointer-arith",
+        "-Werror=vla",
+        "-Werror=gnu-empty-initializer",
+    ],
+}
+
+cc_library_static {
+    name: "vulkan_instance",
+    host_supported: false,
+    srcs: [
+        "vk_instance.c",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "vulkan_instance_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "vulkan_util",
+        "_mesa_u_gralloc",
+        "nir",
+        "compiler",
+        "vtn",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "vulkan_lite_instance",
+    host_supported: false,
+    srcs: [
+        "vk_instance.c",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "vulkan_lite_instance_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "vulkan_util",
+        "_mesa_u_gralloc",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "vulkan_lite_runtime",
+    host_supported: false,
+    srcs: [
+        "rmv/vk_rmv_common.c",
+        "rmv/vk_rmv_exporter.c",
+        "vk_blend.c",
+        "vk_buffer.c",
+        "vk_buffer_view.c",
+        "vk_cmd_copy.c",
+        "vk_cmd_enqueue.c",
+        "vk_command_buffer.c",
+        "vk_command_pool.c",
+        "vk_debug_report.c",
+        "vk_debug_utils.c",
+        "vk_deferred_operation.c",
+        "vk_descriptor_set_layout.c",
+        "vk_descriptors.c",
+        "vk_descriptor_update_template.c",
+        "vk_device.c",
+        "vk_device_generated_commands.c",
+        "vk_device_memory.c",
+        "vk_fence.c",
+        "vk_framebuffer.c",
+        "vk_graphics_state.c",
+        "vk_image.c",
+        "vk_log.c",
+        "vk_meta_object_list.c",
+        "vk_object.c",
+        "vk_physical_device.c",
+        "vk_pipeline_layout.c",
+        "vk_query_pool.c",
+        "vk_queue.c",
+        "vk_render_pass.c",
+        "vk_sampler.c",
+        "vk_semaphore.c",
+        "vk_standard_sample_locations.c",
+        "vk_sync.c",
+        "vk_sync_binary.c",
+        "vk_sync_dummy.c",
+        "vk_sync_timeline.c",
+        "vk_synchronization.c",
+        "vk_video.c",
+        "vk_ycbcr_conversion.c",
+        "vk_drm_syncobj.c",
+        "vk_android.c",
+    ],
+    generated_headers: [
+        "vk_cmd_enqueue_entrypoints_header",
+        "vk_cmd_queue_header",
+        "vk_common_entrypoints_header",
+        "vk_dispatch_trampolines_header",
+        "vk_format_info_header",
+        "vk_physical_device_features_header",
+        "vk_physical_device_properties_header",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    generated_sources: [
+        "vk_cmd_enqueue_entrypoints_impl",
+        "vk_cmd_queue_impl",
+        "vk_common_entrypoints_impl",
+        "vk_dispatch_trampolines_impl",
+        "vk_format_info_impl",
+        "vk_physical_device_features_impl",
+        "vk_physical_device_properties_impl",
+        "vk_physical_device_spirv_caps",
+        "vk_synchronization_helpers",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "vulkan_util",
+        "_mesa_u_gralloc",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "vulkan_runtime",
+    host_supported: false,
+    srcs: [
+        "vk_meta.c",
+        "vk_meta_blit_resolve.c",
+        "vk_meta_clear.c",
+        "vk_meta_copy_fill_update.c",
+        "vk_meta_draw_rects.c",
+        "vk_nir.c",
+        "vk_nir_convert_ycbcr.c",
+        "vk_pipeline.c",
+        "vk_pipeline_cache.c",
+        "vk_shader.c",
+        "vk_shader_module.c",
+        "vk_texcompress_etc2.c",
+        "common/vk/barrier.c",
+        "common/util.c",
+        "radix_sort_u64.c",
+        "radix_sort_vk.c",
+        "vk_acceleration_structure.c",
+        "vk_texcompress_astc.c",
+    ],
+    generated_headers: [
+        "init.comp.spv.h",
+        "fill.comp.spv.h",
+        "histogram.comp.spv.h",
+        "prefix.comp.spv.h",
+        "scatter_0_even.comp.spv.h",
+        "scatter_0_odd.comp.spv.h",
+        "scatter_1_even.comp.spv.h",
+        "scatter_1_odd.comp.spv.h",
+        "lbvh_generate_ir.spv.h",
+        "lbvh_main.spv.h",
+        "leaf.spv.h",
+        "morton.spv.h",
+        "ploc_internal.spv.h",
+        "astc_spv.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "vulkan_util",
+        "_mesa_u_gralloc",
+        "nir",
+        "compiler",
+        "vtn",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

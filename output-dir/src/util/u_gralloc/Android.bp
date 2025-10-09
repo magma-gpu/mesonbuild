@@ -1,0 +1,47 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "_mesa_u_gralloc_c_flags",
+    cflags: [
+        "-DHAS_FREEDRENO",
+    ],
+}
+
+cc_library_static {
+    name: "_mesa_u_gralloc",
+    host_supported: false,
+    srcs: [
+        "u_gralloc.c",
+        "u_gralloc_internal.c",
+        "u_gralloc_fallback.c",
+        "u_gralloc_cros_api.c",
+        "u_gralloc_libdrm.c",
+        "u_gralloc_qcom.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_mesa_u_gralloc_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+    ],
+    shared_libs: [
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    
+}
+

@@ -1,0 +1,170 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "pan_gen_perf_gen",
+    main: "pan_gen_perf.py",
+    srcs: [
+        "pan_gen_perf.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "pan-perf-sources_header",
+  srcs: [
+    "G31.xml",
+    "G51.xml",
+    "G52.xml",
+    "G57.xml",
+    "G68.xml",
+    "G71.xml",
+    "G72.xml",
+    "G76.xml",
+    "G77.xml",
+    "G78.xml",
+    "T72x.xml",
+    "T76x.xml",
+    "T82x.xml",
+    "T83x.xml",
+    "T86x.xml",
+    "T88x.xml",
+  ],
+  out: [
+    "pan_perf_metrics.h",
+  ],
+  tools: [
+    "pan_gen_perf_gen",
+  ],
+  cmd: "python3 $(location pan_gen_perf_gen) --code "$(genDir)/placeholder.c" --header" + 
+        "$(location pan_perf_metrics.h) $(location G31.xml) $(location G51.xml)" + 
+        "$(location G52.xml) $(location G57.xml) $(location G68.xml) $(location G71.xml)" + 
+        "$(location G72.xml) $(location G76.xml) $(location G77.xml) $(location G78.xml)" + 
+        "$(location T72x.xml) $(location T76x.xml) $(location T82x.xml) $(location" + 
+        "T83x.xml) $(location T86x.xml) $(location T88x.xml)",
+}
+
+genrule {
+  name: "pan-perf-sources_impl",
+  srcs: [
+    "G31.xml",
+    "G51.xml",
+    "G52.xml",
+    "G57.xml",
+    "G68.xml",
+    "G71.xml",
+    "G72.xml",
+    "G76.xml",
+    "G77.xml",
+    "G78.xml",
+    "T72x.xml",
+    "T76x.xml",
+    "T82x.xml",
+    "T83x.xml",
+    "T86x.xml",
+    "T88x.xml",
+  ],
+  out: [
+    "pan_perf_metrics.c",
+  ],
+  tools: [
+    "pan_gen_perf_gen",
+  ],
+  cmd: "python3 $(location pan_gen_perf_gen) --code $(location pan_perf_metrics.c)" + 
+        "--header "$(genDir)/pan_perf_metrics.h" $(location G31.xml) $(location G51.xml)" + 
+        "$(location G52.xml) $(location G57.xml) $(location G68.xml) $(location G71.xml)" + 
+        "$(location G72.xml) $(location G76.xml) $(location G77.xml) $(location G78.xml)" + 
+        "$(location T72x.xml) $(location T76x.xml) $(location T82x.xml) $(location" + 
+        "T83x.xml) $(location T86x.xml) $(location T88x.xml)",
+}
+
+cc_library_static {
+    name: "panfrost_perf",
+    host_supported: false,
+    srcs: [
+        "pan_perf.c",
+    ],
+    generated_headers: [
+        "pan-perf-sources_header",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    generated_sources: [
+        "pan-perf-sources_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    static_libs: [
+        "libsync",
+        "panfrost_lib",
+        "panfrost_decode",
+        "panfrost_midgard",
+        "panfrost_bifrost",
+        "pan-format-v5",
+        "pan-format-v6",
+        "pan-format-v7",
+        "pan-format-v9",
+        "pan-format-v10",
+        "pan-format-v12",
+        "pan-format-v13",
+        "pan-arch-v4",
+        "pan-arch-v5",
+        "pan-arch-v6",
+        "pan-arch-v7",
+        "pan-arch-v9",
+        "pan-arch-v10",
+        "pan-arch-v12",
+        "pan-arch-v13",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

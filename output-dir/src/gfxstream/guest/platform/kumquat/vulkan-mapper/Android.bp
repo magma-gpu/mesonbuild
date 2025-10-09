@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_library_headers {
+    name: "inc_gfxstream_vulkan_mapper",
+    export_include_dirs: [
+        ".",
+    ],
+}
+
+cc_defaults {
+    name: "gfxstream_vulkan_mapper_cpp_flags",
+    cppflags: [
+        "-D_FILE_OFFSET_BITS=64",
+        "-DLINUX_GUEST_BUILD",
+        "-DVK_GFXSTREAM_STRUCTURE_TYPE_EXT",
+    ],
+}
+
+cc_library_static {
+    name: "gfxstream_vulkan_mapper",
+    host_supported: false,
+    srcs: [
+        "GfxStreamVulkanMapper.cpp",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "gfxstream_vulkan_mapper_cpp_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "vulkan_util",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "virtgpu_kumquat_ffi",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_vulkan_util",
+        "inc_gfxstream_vulkan_mapper",
+        "inc_virtgpu_kumquat_ffi",
+    ]
+    
+}
+

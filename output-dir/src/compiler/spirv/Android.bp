@@ -1,0 +1,181 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "spirv_info_gen_gen",
+    main: "spirv_info_gen.py",
+    srcs: [
+        "spirv_info_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vtn_gather_types_c_gen",
+    main: "vtn_gather_types_c.py",
+    srcs: [
+        "vtn_gather_types_c.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "vtn_generator_ids_h_gen",
+    main: "vtn_generator_ids_h.py",
+    srcs: [
+        "vtn_generator_ids_h.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "spirv_info_header",
+  srcs: [
+    "spirv.core.grammar.json",
+  ],
+  out: [
+    "spirv_info.h",
+  ],
+  tools: [
+    "spirv_info_gen_gen",
+  ],
+  cmd: "python3 $(location spirv_info_gen_gen) --json $(location" + 
+        "spirv.core.grammar.json) --out-h $(location spirv_info.h) --out-c" + 
+        ""$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "spirv_info_impl",
+  srcs: [
+    "spirv.core.grammar.json",
+  ],
+  out: [
+    "spirv_info.c",
+  ],
+  tools: [
+    "spirv_info_gen_gen",
+  ],
+  cmd: "python3 $(location spirv_info_gen_gen) --json $(location" + 
+        "spirv.core.grammar.json) --out-h "$(genDir)/spirv_info.h" --out-c $(location" + 
+        "spirv_info.c)",
+}
+
+genrule {
+  name: "vtn_gather_types.c",
+  srcs: [
+    "spirv.core.grammar.json",
+  ],
+  out: [
+    "vtn_gather_types.c",
+  ],
+  tools: [
+    "vtn_gather_types_c_gen",
+  ],
+  cmd: "python3 $(location vtn_gather_types_c_gen) $(location spirv.core.grammar.json)" + 
+        "$(location vtn_gather_types.c)",
+}
+
+genrule {
+  name: "vtn_generator_ids.h",
+  srcs: [
+    "spir-v.xml",
+  ],
+  out: [
+    "vtn_generator_ids.h",
+  ],
+  tools: [
+    "vtn_generator_ids_h_gen",
+  ],
+  cmd: "python3 $(location vtn_generator_ids_h_gen) $(location spir-v.xml) $(location" + 
+        "vtn_generator_ids.h)",
+}
+
+cc_defaults {
+    name: "vtn_c_flags",
+    cflags: [
+        "-Werror=pointer-arith",
+        "-Werror=vla",
+        "-Werror=gnu-empty-initializer",
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "vtn",
+    host_supported: false,
+    srcs: [
+        "gl_spirv.c",
+        "spirv_to_nir.c",
+        "vtn_alu.c",
+        "vtn_amd.c",
+        "vtn_cfg.c",
+        "vtn_cmat.c",
+        "vtn_debug.c",
+        "vtn_glsl450.c",
+        "vtn_opencl.c",
+        "vtn_structured_cfg.c",
+        "vtn_subgroup.c",
+        "vtn_variables.c",
+    ],
+    generated_headers: [
+        "spirv_info_header",
+        "vtn_generator_ids.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    generated_sources: [
+        "spirv_info_impl",
+        "vtn_gather_types.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "vtn_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

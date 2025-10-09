@@ -1,0 +1,118 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "gfxstream_vk_devenv_icd",
+  srcs: [
+    ":vk_icd_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "gfxstream_vk_devenv_icd.aarch64.json",
+  ],
+  tools: [
+    "vk_icd_gen_gen",
+  ],
+  cmd: "python3 $(location vk_icd_gen_gen) --api-version 1.3 --xml $(location" + 
+        "registry/vk.xml) --sizeof-pointer 0 --lib-path" + 
+        "/tmp/tmpx1uwqcvq/src/gfxstream/guest/vulkan/libvulkan_gfxstream.so --out" + 
+        "$(location gfxstream_vk_devenv_icd.aarch64.json)",
+}
+
+genrule {
+  name: "gfxstream_vk_icd",
+  srcs: [
+    ":vk_icd_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "gfxstream_vk_icd.aarch64.json",
+  ],
+  tools: [
+    "vk_icd_gen_gen",
+  ],
+  cmd: "python3 $(location vk_icd_gen_gen) --api-version 1.1 --xml $(location" + 
+        "registry/vk.xml) --sizeof-pointer 0 --lib-path /usr/local/lib/x86_64-linux-" + 
+        "gnu/libvulkan_gfxstream.so --out $(location gfxstream_vk_icd.aarch64.json)",
+}
+
+cc_defaults {
+    name: "vulkan_gfxstream_cpp_flags",
+    cppflags: [
+        "-D_FILE_OFFSET_BITS=64",
+        "-DLINUX_GUEST_BUILD",
+        "-DVK_GFXSTREAM_STRUCTURE_TYPE_EXT",
+    ],
+}
+
+cc_library_shared {
+    name: "vulkan_gfxstream",
+    host_supported: false,
+    srcs: [
+        "gfxstream_vk_device.cpp",
+        "gfxstream_vk_cmd.cpp",
+        "gfxstream_vk_wsi.cpp",
+        "CommandBufferStagingStream.cpp",
+        "DescriptorSetVirtualization.cpp",
+        "HostVisibleMemoryVirtualization.cpp",
+        "ResourceTracker.cpp",
+        "Resources.cpp",
+        "Validation.cpp",
+        "VulkanHandleMapping.cpp",
+        "VulkanStreamGuest.cpp",
+        "gfxstream_vk_private.cpp",
+        "GfxStreamVulkanConnection.cpp",
+    ],
+    generated_headers: [
+        "git_sha1.h",
+        "gfxstream_vk_entrypoints_header",
+        "gfxstream_guest_vk_autogen_header",
+        "vulkan_gfxstream_header",
+    ],
+    generated_sources: [
+        "gfxstream_vk_entrypoints_impl",
+        "gfxstream_guest_vk_autogen_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "vulkan_gfxstream_cpp_flags",
+    ],
+    static_libs: [
+        "gfxstream_vk_stubs",
+        "vulkan_wsi",
+        "platform_virtgpu",
+        "connection_manager",
+        "aemu",
+    ],
+    whole_static_libs: [
+        "vulkan_lite_runtime",
+        "vulkan_lite_instance",
+        "vulkan_wsi",
+    ],
+    shared_libs: [
+        "libdrm",
+    ],
+    header_libs: [
+        "inc_vulkan_headers",
+        "inc_guest_iostream",
+        "inc_vulkan_enc",
+        "inc_platform_virtgpu",
+        "inc_gfxstream_vk_stubs",
+        "inc_goldfish_address_space",
+        "inc_src",
+        "inc_aemu",
+        "inc_connection_manager",
+    ]
+    
+}
+

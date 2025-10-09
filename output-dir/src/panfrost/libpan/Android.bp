@@ -1,0 +1,946 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "libpan_shaders_v10.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v10.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 10 $(location libpan_v10.spv)" + 
+        "$(location libpan_shaders_v10.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v10.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v10.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 10 $(location libpan_v10.spv)" + 
+        ""$(genDir)/libpan_shaders_v10.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v12.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v12.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 12 $(location libpan_v12.spv)" + 
+        "$(location libpan_shaders_v12.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v12.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v12.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 12 $(location libpan_v12.spv)" + 
+        ""$(genDir)/libpan_shaders_v12.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v13.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v13.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 13 $(location libpan_v13.spv)" + 
+        "$(location libpan_shaders_v13.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v13.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v13.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 13 $(location libpan_v13.spv)" + 
+        ""$(genDir)/libpan_shaders_v13.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v4.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v4.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 4 $(location libpan_v4.spv)" + 
+        "$(location libpan_shaders_v4.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v4.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v4.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 4 $(location libpan_v4.spv)" + 
+        ""$(genDir)/libpan_shaders_v4.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v5.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v5.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 5 $(location libpan_v5.spv)" + 
+        "$(location libpan_shaders_v5.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v5.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v5.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 5 $(location libpan_v5.spv)" + 
+        ""$(genDir)/libpan_shaders_v5.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v6.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v6.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 6 $(location libpan_v6.spv)" + 
+        "$(location libpan_shaders_v6.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v6.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v6.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 6 $(location libpan_v6.spv)" + 
+        ""$(genDir)/libpan_shaders_v6.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v7.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v7.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 7 $(location libpan_v7.spv)" + 
+        "$(location libpan_shaders_v7.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v7.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v7.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 7 $(location libpan_v7.spv)" + 
+        ""$(genDir)/libpan_shaders_v7.h"",
+}
+
+genrule {
+  name: "libpan_shaders_v9.h_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v9.h",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 9 $(location libpan_v9.spv)" + 
+        "$(location libpan_shaders_v9.h)",
+}
+
+genrule {
+  name: "libpan_shaders_v9.h_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_shaders_v9.c",
+  ],
+  tools: [
+    "panfrost_compile",
+  ],
+  cmd: "$(location panfrost_compile) libpan_shaders 9 $(location libpan_v9.spv)" + 
+        ""$(genDir)/libpan_shaders_v9.h"",
+}
+
+genrule {
+  name: "libpan_v10.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v10.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v10.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=10'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v10.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v10.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v10.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=10'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v10.cpp)",
+}
+
+genrule {
+  name: "libpan_v10.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v10.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v10.spv) --depfile @DEPFILE@" + 
+        "$(location clear_afbc_metadata.cl) $(location query_pool.cl) $(location" + 
+        "draw_helper.cl) $(location indirect_dispatch.cl) -- -DPAN_ARCH=10" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v12.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v12.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v12.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=12'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v12.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v12.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v12.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=12'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v12.cpp)",
+}
+
+genrule {
+  name: "libpan_v12.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v12.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v12.spv) --depfile @DEPFILE@" + 
+        "$(location clear_afbc_metadata.cl) $(location query_pool.cl) $(location" + 
+        "draw_helper.cl) $(location indirect_dispatch.cl) -- -DPAN_ARCH=12" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v13.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v13.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v13.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=13'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v13.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v13.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v13.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=13'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v13.cpp)",
+}
+
+genrule {
+  name: "libpan_v13.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v13.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v13.spv) --depfile @DEPFILE@" + 
+        "$(location clear_afbc_metadata.cl) $(location query_pool.cl) $(location" + 
+        "draw_helper.cl) $(location indirect_dispatch.cl) -- -DPAN_ARCH=13" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v4.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v4.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v4.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=4'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v4.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v4.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v4.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=4'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v4.cpp)",
+}
+
+genrule {
+  name: "libpan_v4.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v4.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v4.spv) --depfile @DEPFILE@ $(location" + 
+        "clear_afbc_metadata.cl) $(location query_pool.cl) $(location draw_helper.cl)" + 
+        "$(location indirect_dispatch.cl) -- -DPAN_ARCH=4" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v5.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v5.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v5.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=5'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v5.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v5.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v5.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=5'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v5.cpp)",
+}
+
+genrule {
+  name: "libpan_v5.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v5.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v5.spv) --depfile @DEPFILE@ $(location" + 
+        "clear_afbc_metadata.cl) $(location query_pool.cl) $(location draw_helper.cl)" + 
+        "$(location indirect_dispatch.cl) -- -DPAN_ARCH=5" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v6.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v6.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v6.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=6'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v6.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v6.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v6.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=6'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v6.cpp)",
+}
+
+genrule {
+  name: "libpan_v6.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v6.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v6.spv) --depfile @DEPFILE@ $(location" + 
+        "clear_afbc_metadata.cl) $(location query_pool.cl) $(location draw_helper.cl)" + 
+        "$(location indirect_dispatch.cl) -- -DPAN_ARCH=6" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v7.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v7.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v7.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=7'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v7.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v7.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v7.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=7'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v7.cpp)",
+}
+
+genrule {
+  name: "libpan_v7.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v7.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v7.spv) --depfile @DEPFILE@ $(location" + 
+        "clear_afbc_metadata.cl) $(location query_pool.cl) $(location draw_helper.cl)" + 
+        "$(location indirect_dispatch.cl) -- -DPAN_ARCH=7" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+
+genrule {
+  name: "libpan_v9.cpp_header",
+  srcs: [
+  ],
+  out: [
+    "libpan_v9.h",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v9.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=9'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> "$(genDir)/placeholder.c"",
+}
+
+genrule {
+  name: "libpan_v9.cpp_impl",
+  srcs: [
+  ],
+  out: [
+    "libpan_v9.cpp",
+  ],
+  tools: [
+    "vtn_bindgen2",
+  ],
+  cmd: "$(location vtn_bindgen2) <CustomTarget f39cea9@@libpan_v9.spv@cus: [<Executable" + 
+        "93ae97e@@mesa_clc@exe: mesa_clc>, '-o', '@OUTPUT@', '--depfile', '@DEPFILE@'," + 
+        "<File: src/panfrost/libpan/clear_afbc_metadata.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/query_pool.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/draw_helper.cl (not built)>, <File:" + 
+        "src/panfrost/libpan/indirect_dispatch.cl (not built)>, '--', '-DPAN_ARCH=9'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl'," + 
+        "'-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/.'," + 
+        "'-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../.." + 
+        "/', '-" + 
+        "I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../'," + 
+        "'-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../', '-fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/=', '-fmacro-" + 
+        "prefix-map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//=', '-fmacro-" + 
+        "prefix-map=/tmp/tmpx1uwqcvq/=', '-cl-std=cl2.0', '-D__OPENCL_VERSION__=200'," + 
+        "'-DHAVE___BUILTIN_FFS', '-DHAVE___BUILTIN_CLZ']> $(location libpan_v9.cpp)",
+}
+
+genrule {
+  name: "libpan_v9.spv",
+  srcs: [
+    "clear_afbc_metadata.cl",
+    "query_pool.cl",
+    "draw_helper.cl",
+    "indirect_dispatch.cl",
+  ],
+  out: [
+    "libpan_v9.spv",
+  ],
+  tools: [
+    "mesa_clc",
+  ],
+  cmd: "$(location mesa_clc) -o $(location libpan_v9.spv) --depfile @DEPFILE@ $(location" + 
+        "clear_afbc_metadata.cl) $(location query_pool.cl) $(location draw_helper.cl)" + 
+        "$(location indirect_dispatch.cl) -- -DPAN_ARCH=9" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/include" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/libcl" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/. -I" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../../" + 
+        "-I/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/panfrost/libpan/../" + 
+        "-I/tmp/tmpx1uwqcvq/src/panfrost/libpan/../ -fmacro-prefix-" + 
+        "map=../../usr/local/google/home/gurchetansingh/meson/temp_mesa/= -fmacro-prefix-" + 
+        "map=/usr/local/google/home/gurchetansingh/meson/temp_mesa//= -fmacro-prefix-" + 
+        "map=/tmp/tmpx1uwqcvq/= -cl-std=cl2.0 -D__OPENCL_VERSION__=200" + 
+        "-DHAVE___BUILTIN_FFS -DHAVE___BUILTIN_CLZ",
+}
+

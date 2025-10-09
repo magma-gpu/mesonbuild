@@ -1,0 +1,31 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_library_headers {
+    name: "inc_gallium_drivers",
+    export_include_dirs: [
+        "drivers",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_gallium_winsys",
+    export_include_dirs: [
+        "winsys",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_gallium_winsys_sw",
+    export_include_dirs: [
+        "winsys/sw",
+    ],
+}
+

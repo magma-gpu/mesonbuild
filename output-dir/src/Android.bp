@@ -1,0 +1,103 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "git_sha1.h",
+  srcs: [
+    "git_sha1.h.in",
+  ],
+  out: [
+    "git_sha1.h",
+  ],
+  tools: [
+  ],
+  cmd: "NULL --internal vcstagger $(location git_sha1.h.in) $(location git_sha1.h) """ + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src @VCS_TAG@ (.*) git" + 
+        "show --no-patch --abbrev=10 --format=" (git-%h)"",
+}
+
+cc_library_headers {
+    name: "inc_amd_common",
+    export_include_dirs: [
+        "amd/common",
+        "amd/common/nir",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_amd_common_llvm",
+    export_include_dirs: [
+        "amd/llvm",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_frontends",
+    export_include_dirs: [
+        "gallium/frontends",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_gallium",
+    export_include_dirs: [
+        "gallium/include",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_gallium_aux",
+    export_include_dirs: [
+        "gallium/auxiliary",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_llvmpipe",
+    export_include_dirs: [
+        "gallium/drivers/llvmpipe",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_mesa",
+    export_include_dirs: [
+        "mesa",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_src",
+    export_include_dirs: [
+        ".",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_tool",
+    export_include_dirs: [
+        "tool",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_virtio",
+    export_include_dirs: [
+        "virtio",
+    ],
+}
+
+cc_library_headers {
+    name: "inc_virtio_gpu",
+    export_include_dirs: [
+        "virtio/virtio-gpu",
+    ],
+}
+

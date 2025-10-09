@@ -1,0 +1,415 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "bi_builder.h_gen",
+    main: "bi_builder.h.py",
+    srcs: [
+        "bi_builder.h.py",
+        "bifrost_isa.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "bi_opcodes.c_gen",
+    main: "bi_opcodes.c.py",
+    srcs: [
+        "bi_opcodes.c.py",
+        "bifrost_isa.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "bi_opcodes.h_gen",
+    main: "bi_opcodes.h.py",
+    srcs: [
+        "bi_opcodes.h.py",
+        "bifrost_isa.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "bi_packer.c_gen",
+    main: "bi_packer.c.py",
+    srcs: [
+        "bi_packer.c.py",
+        "bifrost_isa.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "bi_printer.c_gen",
+    main: "bi_printer.c.py",
+    srcs: [
+        "bi_printer.c.py",
+        "bifrost_isa.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "bi_swizzles.c_gen",
+    main: "bi_swizzles.c.py",
+    srcs: [
+        "bi_swizzles.c.py",
+        "bifrost_isa.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "bifrost_nir_algebraic_gen",
+    main: "bifrost_nir_algebraic.py",
+    srcs: [
+        "bifrost_nir_algebraic.py",
+        "nir_algebraic.py",
+        "nir_opcodes.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "gen_disasm_gen",
+    main: "gen_disasm.py",
+    srcs: [
+        "bifrost_isa.py",
+        "gen_disasm.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "bi_builder.h",
+  srcs: [
+    "IR_pseudo.xml",
+    "bifrost/ISA.xml",
+    "valhall/ISA.xml",
+  ],
+  out: [
+    "bi_builder.h",
+  ],
+  tools: [
+    "bi_builder.h_gen",
+  ],
+  cmd: "python3 $(location bi_builder.h_gen) $(location IR_pseudo.xml) $(location" + 
+        "bifrost/ISA.xml) $(location valhall/ISA.xml) &> $(location bi_builder.h)",
+}
+
+genrule {
+  name: "bi_opcodes.c",
+  srcs: [
+    "IR_pseudo.xml",
+    "bifrost/ISA.xml",
+    "valhall/ISA.xml",
+  ],
+  out: [
+    "bi_opcodes.c",
+  ],
+  tools: [
+    "bi_opcodes.c_gen",
+  ],
+  cmd: "python3 $(location bi_opcodes.c_gen) $(location IR_pseudo.xml) $(location" + 
+        "bifrost/ISA.xml) $(location valhall/ISA.xml) &> $(location bi_opcodes.c)",
+}
+
+genrule {
+  name: "bi_opcodes.h",
+  srcs: [
+    "IR_pseudo.xml",
+    "bifrost/ISA.xml",
+    "valhall/ISA.xml",
+  ],
+  out: [
+    "bi_opcodes.h",
+  ],
+  tools: [
+    "bi_opcodes.h_gen",
+  ],
+  cmd: "python3 $(location bi_opcodes.h_gen) $(location IR_pseudo.xml) $(location" + 
+        "bifrost/ISA.xml) $(location valhall/ISA.xml) &> $(location bi_opcodes.h)",
+}
+
+genrule {
+  name: "bi_packer.c",
+  srcs: [
+    "IR_pseudo.xml",
+    "bifrost/ISA.xml",
+    "valhall/ISA.xml",
+  ],
+  out: [
+    "bi_packer.c",
+  ],
+  tools: [
+    "bi_packer.c_gen",
+  ],
+  cmd: "python3 $(location bi_packer.c_gen) $(location IR_pseudo.xml) $(location" + 
+        "bifrost/ISA.xml) $(location valhall/ISA.xml) &> $(location bi_packer.c)",
+}
+
+genrule {
+  name: "bi_printer.c",
+  srcs: [
+    "IR_pseudo.xml",
+    "bifrost/ISA.xml",
+    "valhall/ISA.xml",
+  ],
+  out: [
+    "bi_printer.c",
+  ],
+  tools: [
+    "bi_printer.c_gen",
+  ],
+  cmd: "python3 $(location bi_printer.c_gen) $(location IR_pseudo.xml) $(location" + 
+        "bifrost/ISA.xml) $(location valhall/ISA.xml) &> $(location bi_printer.c)",
+}
+
+genrule {
+  name: "bi_swizzles.c",
+  srcs: [
+    "IR_pseudo.xml",
+    "bifrost/ISA.xml",
+  ],
+  out: [
+    "bi_swizzles.c",
+  ],
+  tools: [
+    "bi_swizzles.c_gen",
+  ],
+  cmd: "python3 $(location bi_swizzles.c_gen) $(location IR_pseudo.xml) $(location" + 
+        "bifrost/ISA.xml) &> $(location bi_swizzles.c)",
+}
+
+genrule {
+  name: "bifrost_gen_disasm.c",
+  srcs: [
+    "bifrost/ISA.xml",
+  ],
+  out: [
+    "bifrost_gen_disasm.c",
+  ],
+  tools: [
+    "gen_disasm_gen",
+  ],
+  cmd: "python3 $(location gen_disasm_gen) $(location bifrost/ISA.xml) &> $(location" + 
+        "bifrost_gen_disasm.c)",
+}
+
+genrule {
+  name: "bifrost_nir_algebraic.c",
+  srcs: [
+  ],
+  out: [
+    "bifrost_nir_algebraic.c",
+  ],
+  tools: [
+    "bifrost_nir_algebraic_gen",
+  ],
+  cmd: "python3 $(location bifrost_nir_algebraic_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/nir/ &>" + 
+        "$(location bifrost_nir_algebraic.c)",
+}
+
+cc_library_headers {
+    name: "inc_valhall",
+    export_include_dirs: [
+        ".",
+        "valhall",
+    ],
+}
+
+cc_defaults {
+    name: "panfrost_bifrost_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_defaults {
+    name: "panfrost_bifrost_disasm_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "panfrost_bifrost",
+    host_supported: false,
+    srcs: [
+        "bi_helper_invocations.c",
+        "bi_layout.c",
+        "bi_liveness.c",
+        "bi_lower_divergent_indirects.c",
+        "bi_lower_swizzle.c",
+        "bi_print.c",
+        "bi_opt_control_flow.c",
+        "bi_opt_constant_fold.c",
+        "bi_opt_copy_prop.c",
+        "bi_opt_dce.c",
+        "bi_opt_cse.c",
+        "bi_opt_push_ubo.c",
+        "bi_opt_mod_props.c",
+        "bi_opt_dual_tex.c",
+        "bi_iterator_schedule.c",
+        "bi_pressure_schedule.c",
+        "bi_ra.c",
+        "bi_ra_ssa.c",
+        "bi_spill_ssa.c",
+        "bi_validate.c",
+        "bir.c",
+        "bifrost_compile.c",
+        "bifrost/bi_opt_message_preload.c",
+        "bifrost/bi_pack.c",
+        "bifrost/bi_schedule.c",
+        "bifrost/bi_scoreboard.c",
+        "valhall/va_insert_flow.c",
+        "valhall/va_lower_constants.c",
+        "valhall/va_lower_isel.c",
+        "valhall/va_lower_split_64bit.c",
+        "valhall/va_optimize.c",
+        "valhall/va_mark_last.c",
+        "valhall/va_merge_flow.c",
+        "valhall/va_pack.c",
+        "valhall/va_perf.c",
+        "valhall/va_validate.c",
+    ],
+    generated_headers: [
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "bi_opcodes.h",
+        "bi_builder.h",
+        "valhall_enums.h",
+    ],
+    generated_sources: [
+        "bi_opcodes.c",
+        "bi_swizzles.c",
+        "bi_printer.c",
+        "bi_packer.c",
+        "bifrost_nir_algebraic.c",
+        "valhall_c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_bifrost_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "panfrost_util",
+        "panfrost_bifrost_disasm",
+        "panfrost_valhall_disasm",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_valhall",
+        "inc_nir",
+        "inc_compiler",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panfrost_bifrost_disasm",
+    host_supported: false,
+    srcs: [
+        "bifrost/disassemble.c",
+        "bi_print_common.c",
+    ],
+    generated_headers: [
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    generated_sources: [
+        "bifrost_gen_disasm.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_bifrost_disasm_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "panfrost_util",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

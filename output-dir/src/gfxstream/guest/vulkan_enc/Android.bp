@@ -1,0 +1,120 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "genvk_gen",
+    main: "genvk.py",
+    srcs: [
+        "genvk.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "gfxstream_guest_vk_autogen_header",
+  srcs: [
+    ":genvk_py",
+    ":vk_xml",
+    ":vk_gfxstream_xml",
+  ],
+  out: [
+    "VkEncoder.h",
+    "goldfish_vk_counting_guest.h",
+    "goldfish_vk_deepcopy_guest.h",
+    "goldfish_vk_marshaling_guest.h",
+    "goldfish_vk_extension_structs_guest.h",
+    "goldfish_vk_reserved_marshaling_guest.h",
+    "goldfish_vk_transform_guest.h",
+  ],
+  tools: [
+    "genvk_gen",
+  ],
+  cmd: "python3 $(location genvk_gen) -registry $(location registry/vk.xml)" + 
+        "-registryGfxstream $(location codegen/xml/vk_gfxstream.xml) cereal -o" + 
+        "/tmp/tmpx1uwqcvq/src/gfxstream/guest/vulkan_enc/host/vulkan/cereal",
+}
+
+genrule {
+  name: "gfxstream_guest_vk_autogen_impl",
+  srcs: [
+    ":genvk_py",
+    ":vk_xml",
+    ":vk_gfxstream_xml",
+  ],
+  out: [
+    "goldfish_vk_counting_guest.cpp",
+    "goldfish_vk_deepcopy_guest.cpp",
+    "goldfish_vk_extension_structs_guest.cpp",
+    "goldfish_vk_marshaling_guest.cpp",
+    "goldfish_vk_reserved_marshaling_guest.cpp",
+    "goldfish_vk_transform_guest.cpp",
+    "VkEncoder.cpp",
+    "func_table.cpp",
+  ],
+  tools: [
+    "genvk_gen",
+  ],
+  cmd: "python3 $(location genvk_gen) -registry $(location registry/vk.xml)" + 
+        "-registryGfxstream $(location codegen/xml/vk_gfxstream.xml) cereal -o" + 
+        "/tmp/tmpx1uwqcvq/src/gfxstream/guest/vulkan_enc/host/vulkan/cereal",
+}
+
+genrule {
+  name: "gfxstream_vk_entrypoints_header",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "gfxstream_vk_entrypoints.h",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h $(location gfxstream_vk_entrypoints.h) --out-c" + 
+        ""$(genDir)/placeholder.c" --prefix gfxstream_vk --beta false",
+}
+
+genrule {
+  name: "gfxstream_vk_entrypoints_impl",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "gfxstream_vk_entrypoints.c",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h "$(genDir)/gfxstream_vk_entrypoints.h" --out-c $(location" + 
+        "gfxstream_vk_entrypoints.c) --prefix gfxstream_vk --beta false",
+}
+
+genrule {
+  name: "vulkan_gfxstream_header",
+  srcs: [
+    ":genvk_py",
+    ":vk_gfxstream_xml",
+  ],
+  out: [
+    "vulkan_gfxstream.h",
+  ],
+  tools: [
+    "genvk_gen",
+  ],
+  cmd: "python3 $(location genvk_gen) -registry $(location codegen/xml/vk_gfxstream.xml)" + 
+        "vulkan_gfxstream.h -o $(genDir)",
+}
+

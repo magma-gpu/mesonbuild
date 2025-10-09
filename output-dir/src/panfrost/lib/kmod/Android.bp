@@ -1,0 +1,69 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "pankmod_lib_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "pankmod_lib",
+    host_supported: false,
+    srcs: [
+        "pan_kmod.c",
+        "panfrost_kmod.c",
+        "panthor_kmod.c",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pankmod_lib_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+

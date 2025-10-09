@@ -1,0 +1,1047 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_defaults {
+    name: "pan-arch-v10_c_flags",
+    cflags: [
+        "-DPAN_ARCH=10",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v12_c_flags",
+    cflags: [
+        "-DPAN_ARCH=12",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v13_c_flags",
+    cflags: [
+        "-DPAN_ARCH=13",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v4_c_flags",
+    cflags: [
+        "-DPAN_ARCH=4",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v5_c_flags",
+    cflags: [
+        "-DPAN_ARCH=5",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v6_c_flags",
+    cflags: [
+        "-DPAN_ARCH=6",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v7_c_flags",
+    cflags: [
+        "-DPAN_ARCH=7",
+    ],
+}
+
+cc_defaults {
+    name: "pan-arch-v9_c_flags",
+    cflags: [
+        "-DPAN_ARCH=9",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v10_c_flags",
+    cflags: [
+        "-DPAN_ARCH=10",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v12_c_flags",
+    cflags: [
+        "-DPAN_ARCH=12",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v13_c_flags",
+    cflags: [
+        "-DPAN_ARCH=13",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v5_c_flags",
+    cflags: [
+        "-DPAN_ARCH=5",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v6_c_flags",
+    cflags: [
+        "-DPAN_ARCH=6",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v7_c_flags",
+    cflags: [
+        "-DPAN_ARCH=7",
+    ],
+}
+
+cc_defaults {
+    name: "pan-format-v9_c_flags",
+    cflags: [
+        "-DPAN_ARCH=9",
+    ],
+}
+
+cc_defaults {
+    name: "panfrost_lib_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "pan-arch-v10",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v10_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v12",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v12_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v13",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v13_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v4",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v4_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v5",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v5_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v6",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v6_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v7",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v7_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-arch-v9",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_desc.c",
+        "pan_mod.c",
+        "pan_texture.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-arch-v9_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v10",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v10_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v12",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v12_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v13",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v13_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v5",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v5_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v6",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v6_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v7",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v7_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "pan-format-v9",
+    host_supported: false,
+    srcs: [
+        "pan_format.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "pan-format-v9_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+    ]
+    
+}
+
+cc_library_static {
+    name: "panfrost_lib",
+    host_supported: false,
+    srcs: [
+        "pan_blend.c",
+        "pan_clear.c",
+        "pan_earlyzs.c",
+        "pan_samples.c",
+        "pan_shader.c",
+        "pan_tiler.c",
+        "pan_layout.c",
+        "pan_scratch.c",
+        "pan_props.c",
+        "pan_util.c",
+        "pan_afbc.c",
+    ],
+    generated_headers: [
+        "common_pack.h",
+        "v4_pack.h",
+        "v5_pack.h",
+        "v6_pack.h",
+        "v7_pack.h",
+        "v9_pack.h",
+        "v10_pack.h",
+        "v12_pack.h",
+        "v13_pack.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "panfrost_lib_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "pan-format-v5",
+        "pan-format-v6",
+        "pan-format-v7",
+        "pan-format-v9",
+        "pan-format-v10",
+        "pan-format-v12",
+        "pan-format-v13",
+        "pan-arch-v4",
+        "pan-arch-v5",
+        "pan-arch-v6",
+        "pan-arch-v7",
+        "pan-arch-v9",
+        "pan-arch-v10",
+        "pan-arch-v12",
+        "pan-arch-v13",
+        "pankmod_lib",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+        "panfrost_model_lib",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_panfrost",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

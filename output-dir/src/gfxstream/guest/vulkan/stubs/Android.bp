@@ -1,0 +1,48 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+cc_library_headers {
+    name: "inc_gfxstream_vk_stubs",
+    export_include_dirs: [
+        ".",
+    ],
+}
+
+cc_defaults {
+    name: "gfxstream_vk_stubs_cpp_flags",
+    cppflags: [
+        "-D_FILE_OFFSET_BITS=64",
+        "-DLINUX_GUEST_BUILD",
+        "-DVK_GFXSTREAM_STRUCTURE_TYPE_EXT",
+    ],
+}
+
+cc_library_static {
+    name: "gfxstream_vk_stubs",
+    host_supported: false,
+    srcs: [
+        "GfxStreamRenderControl.cpp",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "gfxstream_vk_stubs_cpp_flags",
+    ],
+    header_libs: [
+        "inc_connection_manager",
+        "inc_platform_virtgpu",
+        "inc_guest_iostream",
+        "inc_src",
+    ]
+    
+}
+

@@ -1,0 +1,88 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "wsi_entrypoints_header",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "wsi_common_entrypoints.h",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h $(location wsi_common_entrypoints.h) --out-c" + 
+        ""$(genDir)/placeholder.c" --prefix wsi --beta false",
+}
+
+genrule {
+  name: "wsi_entrypoints_impl",
+  srcs: [
+    ":vk_entrypoints_gen_py",
+    ":vk_xml",
+  ],
+  out: [
+    "wsi_common_entrypoints.c",
+  ],
+  tools: [
+    "vk_entrypoints_gen_gen",
+  ],
+  cmd: "python3 $(location vk_entrypoints_gen_gen) --xml $(location registry/vk.xml)" + 
+        "--proto --weak --out-h "$(genDir)/wsi_common_entrypoints.h" --out-c $(location" + 
+        "wsi_common_entrypoints.c) --prefix wsi --beta false",
+}
+
+cc_library_static {
+    name: "vulkan_wsi",
+    host_supported: false,
+    srcs: [
+        "wsi_common.c",
+        "wsi_common_drm.c",
+        "wsi_common_headless.c",
+    ],
+    generated_headers: [
+        "wsi_entrypoints_header",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    generated_sources: [
+        "wsi_entrypoints_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    static_libs: [
+        "libsync",
+        "xmlconfig",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+    ]
+    
+}
+

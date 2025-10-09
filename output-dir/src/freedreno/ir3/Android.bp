@@ -1,0 +1,286 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "ir3_nir_branch_and_or_not_gen",
+    main: "ir3_nir_branch_and_or_not.py",
+    srcs: [
+        "ir3_nir_branch_and_or_not.py",
+        "nir_algebraic.py",
+        "nir_opcodes.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "ir3_nir_imul_gen",
+    main: "ir3_nir_imul.py",
+    srcs: [
+        "ir3_nir_imul.py",
+        "nir_algebraic.py",
+        "nir_opcodes.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "ir3_nir_trig_gen",
+    main: "ir3_nir_trig.py",
+    srcs: [
+        "ir3_nir_trig.py",
+        "nir_algebraic.py",
+        "nir_opcodes.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "ir3_nir_triop_bitwise_gen",
+    main: "ir3_nir_triop_bitwise.py",
+    srcs: [
+        "ir3_nir_triop_bitwise.py",
+        "nir_algebraic.py",
+        "nir_opcodes.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "ir3_lexer.c",
+  srcs: [
+    "ir3_lexer.l",
+  ],
+  out: [
+    "ir3_lexer.c",
+  ],
+  tools: [
+  ],
+  cmd: "flex -o $(location ir3_lexer.c) $(location ir3_lexer.l)",
+}
+
+genrule {
+  name: "ir3_nir_branch_and_or_not.c",
+  srcs: [
+  ],
+  out: [
+    "ir3_nir_branch_and_or_not.c",
+  ],
+  tools: [
+    "ir3_nir_branch_and_or_not_gen",
+  ],
+  cmd: "python3 $(location ir3_nir_branch_and_or_not_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/nir/ &>" + 
+        "$(location ir3_nir_branch_and_or_not.c)",
+}
+
+genrule {
+  name: "ir3_nir_imul.c",
+  srcs: [
+  ],
+  out: [
+    "ir3_nir_imul.c",
+  ],
+  tools: [
+    "ir3_nir_imul_gen",
+  ],
+  cmd: "python3 $(location ir3_nir_imul_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/nir/ &>" + 
+        "$(location ir3_nir_imul.c)",
+}
+
+genrule {
+  name: "ir3_nir_trig.c",
+  srcs: [
+  ],
+  out: [
+    "ir3_nir_trig.c",
+  ],
+  tools: [
+    "ir3_nir_trig_gen",
+  ],
+  cmd: "python3 $(location ir3_nir_trig_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/nir/ &>" + 
+        "$(location ir3_nir_trig.c)",
+}
+
+genrule {
+  name: "ir3_nir_triop_bitwise.c",
+  srcs: [
+  ],
+  out: [
+    "ir3_nir_triop_bitwise.c",
+  ],
+  tools: [
+    "ir3_nir_triop_bitwise_gen",
+  ],
+  cmd: "python3 $(location ir3_nir_triop_bitwise_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/compiler/nir/ &>" + 
+        "$(location ir3_nir_triop_bitwise.c)",
+}
+
+genrule {
+  name: "ir3_parser.[ch]_header",
+  srcs: [
+    "ir3_parser.y",
+  ],
+  out: [
+    "ir3_parser.h",
+  ],
+  tools: [
+  ],
+  cmd: "bison -Wno-deprecated $(location ir3_parser.y) --name-prefix=ir3_yy" + 
+        "--defines=@OUTPUT1@ --output=@OUTPUT0@",
+}
+
+genrule {
+  name: "ir3_parser.[ch]_impl",
+  srcs: [
+    "ir3_parser.y",
+  ],
+  out: [
+    "ir3_parser.c",
+  ],
+  tools: [
+  ],
+  cmd: "bison -Wno-deprecated $(location ir3_parser.y) --name-prefix=ir3_yy" + 
+        "--defines=@OUTPUT1@ --output=@OUTPUT0@",
+}
+
+cc_defaults {
+    name: "freedreno_ir3_c_flags",
+    cflags: [
+        "-Wno-override-init",
+        "-Wno-initializer-overrides",
+    ],
+}
+
+cc_library_static {
+    name: "freedreno_ir3",
+    host_supported: false,
+    srcs: [
+        "disasm-a3xx.c",
+        "ir3.c",
+        "ir3_a4xx.c",
+        "ir3_a6xx.c",
+        "ir3_alias.c",
+        "ir3_array_to_ssa.c",
+        "ir3_assembler.c",
+        "ir3_compiler_nir.c",
+        "ir3_compiler.c",
+        "ir3_context.c",
+        "ir3_cf.c",
+        "ir3_cp.c",
+        "ir3_cse.c",
+        "ir3_dce.c",
+        "ir3_delay.c",
+        "ir3_dominance.c",
+        "ir3_disk_cache.c",
+        "ir3_image.c",
+        "ir3_legalize.c",
+        "ir3_legalize_relative.c",
+        "ir3_liveness.c",
+        "ir3_lower_parallelcopy.c",
+        "ir3_lower_shared_phi.c",
+        "ir3_lower_spill.c",
+        "ir3_lower_subgroups.c",
+        "ir3_merge_regs.c",
+        "ir3_nir.c",
+        "ir3_nir_analyze_ubo_ranges.c",
+        "ir3_nir_lower_64b.c",
+        "ir3_nir_lower_driver_params_to_ubo.c",
+        "ir3_nir_lower_load_barycentric_at_sample.c",
+        "ir3_nir_lower_load_barycentric_at_offset.c",
+        "ir3_nir_lower_push_consts_to_preamble.c",
+        "ir3_nir_lower_shading_rate.c",
+        "ir3_nir_lower_io_offsets.c",
+        "ir3_nir_lower_tess.c",
+        "ir3_nir_lower_tex_prefetch.c",
+        "ir3_nir_move_varying_inputs.c",
+        "ir3_nir_lower_layer_id.c",
+        "ir3_nir_opt_preamble.c",
+        "ir3_opt_predicates.c",
+        "ir3_postsched.c",
+        "ir3_preamble.c",
+        "ir3_print.c",
+        "ir3_ra.c",
+        "ir3_ra_predicates.c",
+        "ir3_ra_validate.c",
+        "ir3_reconvergence.c",
+        "ir3_remove_unreachable.c",
+        "ir3_rpt.c",
+        "ir3_sched.c",
+        "ir3_shader.c",
+        "ir3_shader_bisect.c",
+        "ir3_shared_folding.c",
+        "ir3_shared_ra.c",
+        "ir3_spill.c",
+        "ir3_validate.c",
+    ],
+    generated_headers: [
+        "ir3-isa_header",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    generated_sources: [
+        "ir3_nir_trig.c",
+        "ir3_nir_imul.c",
+        "ir3_nir_branch_and_or_not.c",
+        "ir3_nir_triop_bitwise.c",
+        "ir3_lexer.c",
+        "ir3-isa_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "freedreno_ir3_c_flags",
+    ],
+    static_libs: [
+        "libsync",
+        "ir3encode",
+        "freedreno_common",
+        "ir3decode",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_freedreno",
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

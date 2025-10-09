@@ -1,0 +1,141 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+genrule {
+  name: "encode.h",
+  srcs: [
+    "ir3.xml",
+  ],
+  out: [
+    "encode.h",
+  ],
+  tools: [
+  ],
+  cmd: "encode.py --xml $(location ir3.xml) --out-h $(location encode.h)",
+}
+
+genrule {
+  name: "ir3-isa_header",
+  srcs: [
+    "ir3.xml",
+  ],
+  out: [
+    "ir3-isa.h",
+  ],
+  tools: [
+  ],
+  cmd: "decode.py --xml $(location ir3.xml) --out-c "$(genDir)/placeholder.c" --out-h" + 
+        "$(location ir3-isa.h)",
+}
+
+genrule {
+  name: "ir3-isa_impl",
+  srcs: [
+    "ir3.xml",
+  ],
+  out: [
+    "ir3-isa.c",
+  ],
+  tools: [
+  ],
+  cmd: "decode.py --xml $(location ir3.xml) --out-c $(location ir3-isa.c) --out-h" + 
+        ""$(genDir)/ir3-isa.h"",
+}
+
+cc_library_static {
+    name: "ir3decode",
+    host_supported: false,
+    srcs: [
+    ],
+    generated_headers: [
+        "ir3-isa_header",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    generated_sources: [
+        "ir3-isa_impl",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    static_libs: [
+        "libsync",
+        "isaspec",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+    ]
+    
+}
+
+cc_library_static {
+    name: "ir3encode",
+    host_supported: false,
+    srcs: [
+        "encode.c",
+    ],
+    generated_headers: [
+        "encode.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "nir",
+        "compiler",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_src",
+        "inc_freedreno",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+

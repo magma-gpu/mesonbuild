@@ -1,0 +1,541 @@
+/*
+ * Copyright (C) 2024 Android Open Source Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package {
+    // See: http://go/android-license-faq
+    default_applicable_licenses: ["external_mesa3d_license"],
+}
+
+python_binary_host {
+    name: "enums2names_gen",
+    main: "enums2names.py",
+    srcs: [
+        "driver_trace/enums2names.py",
+        "enums2names.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "u_indices_gen_gen",
+    main: "u_indices_gen.py",
+    srcs: [
+        "u_indices_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "u_tracepoints_gen",
+    main: "u_tracepoints.py",
+    srcs: [
+        "perf/u_trace.py",
+        "u_tracepoints.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+python_binary_host {
+    name: "u_unfilled_gen_gen",
+    main: "u_unfilled_gen.py",
+    srcs: [
+        "u_unfilled_gen.py",
+    ],
+    libs: [
+        "mako",
+    ],
+}
+
+genrule {
+  name: "tr_util.[ch]_header",
+  srcs: [
+    "../include/pipe/p_defines.h",
+    "../include/pipe/p_video_enums.h",
+    "../../util/blend.h",
+  ],
+  out: [
+    "tr_util.h",
+  ],
+  tools: [
+    "enums2names_gen",
+  ],
+  cmd: "python3 $(location enums2names_gen) $(location ../include/pipe/p_defines.h)" + 
+        "$(location ../include/pipe/p_video_enums.h) $(location ../../util/blend.h) -C" + 
+        ""$(genDir)/placeholder.c" -H $(location tr_util.h) -I tr_util.h",
+}
+
+genrule {
+  name: "tr_util.[ch]_impl",
+  srcs: [
+    "../include/pipe/p_defines.h",
+    "../include/pipe/p_video_enums.h",
+    "../../util/blend.h",
+  ],
+  out: [
+    "tr_util.c",
+  ],
+  tools: [
+    "enums2names_gen",
+  ],
+  cmd: "python3 $(location enums2names_gen) $(location ../include/pipe/p_defines.h)" + 
+        "$(location ../include/pipe/p_video_enums.h) $(location ../../util/blend.h) -C" + 
+        "$(location tr_util.c) -H "$(genDir)/tr_util.h" -I tr_util.h",
+}
+
+genrule {
+  name: "u_indices_gen.c",
+  srcs: [
+  ],
+  out: [
+    "u_indices_gen.c",
+  ],
+  tools: [
+    "u_indices_gen_gen",
+  ],
+  cmd: "python3 $(location u_indices_gen_gen) $(location u_indices_gen.c)",
+}
+
+genrule {
+  name: "u_tracepoints.c",
+  srcs: [
+  ],
+  out: [
+    "u_tracepoints.c",
+  ],
+  tools: [
+    "u_tracepoints_gen",
+  ],
+  cmd: "python3 $(location u_tracepoints_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/util/perf/ -C" + 
+        "$(location u_tracepoints.c)",
+}
+
+genrule {
+  name: "u_tracepoints.h",
+  srcs: [
+  ],
+  out: [
+    "u_tracepoints.h",
+  ],
+  tools: [
+    "u_tracepoints_gen",
+  ],
+  cmd: "python3 $(location u_tracepoints_gen) -p" + 
+        "/usr/local/google/home/gurchetansingh/meson/temp_mesa/src/util/perf/ -H" + 
+        "$(location u_tracepoints.h)",
+}
+
+genrule {
+  name: "u_unfilled_gen.c",
+  srcs: [
+  ],
+  out: [
+    "u_unfilled_gen.c",
+  ],
+  tools: [
+    "u_unfilled_gen_gen",
+  ],
+  cmd: "python3 $(location u_unfilled_gen_gen) $(location u_unfilled_gen.c)",
+}
+
+cc_library_static {
+    name: "gallium",
+    host_supported: false,
+    srcs: [
+        "cso_cache/cso_cache.c",
+        "cso_cache/cso_context.c",
+        "cso_cache/cso_hash.c",
+        "draw/draw_context.c",
+        "draw/draw_fs.c",
+        "draw/draw_gs.c",
+        "draw/draw_mesh.c",
+        "draw/draw_mesh_prim.c",
+        "draw/draw_pipe_aaline.c",
+        "draw/draw_pipe_aapoint.c",
+        "draw/draw_pipe.c",
+        "draw/draw_pipe_clip.c",
+        "draw/draw_pipe_cull.c",
+        "draw/draw_pipe_flatshade.c",
+        "draw/draw_pipe_offset.c",
+        "draw/draw_pipe_pstipple.c",
+        "draw/draw_pipe_stipple.c",
+        "draw/draw_pipe_twoside.c",
+        "draw/draw_pipe_unfilled.c",
+        "draw/draw_pipe_user_cull.c",
+        "draw/draw_pipe_util.c",
+        "draw/draw_pipe_validate.c",
+        "draw/draw_pipe_vbuf.c",
+        "draw/draw_pipe_wide_line.c",
+        "draw/draw_pipe_wide_point.c",
+        "draw/draw_prim_assembler.c",
+        "draw/draw_pt.c",
+        "draw/draw_pt_emit.c",
+        "draw/draw_pt_fetch.c",
+        "draw/draw_pt_fetch_shade_emit.c",
+        "draw/draw_pt_fetch_shade_pipeline.c",
+        "draw/draw_pt_mesh_pipeline.c",
+        "draw/draw_pt_post_vs.c",
+        "draw/draw_pt_so_emit.c",
+        "draw/draw_pt_util.c",
+        "draw/draw_pt_vsplit.c",
+        "draw/draw_tess.c",
+        "draw/draw_vertex.c",
+        "draw/draw_vs.c",
+        "draw/draw_vs_exec.c",
+        "draw/draw_vs_variant.c",
+        "driver_ddebug/dd_context.c",
+        "driver_ddebug/dd_draw.c",
+        "driver_ddebug/dd_screen.c",
+        "driver_noop/noop_pipe.c",
+        "driver_noop/noop_state.c",
+        "driver_trace/tr_context.c",
+        "driver_trace/tr_dump.c",
+        "driver_trace/tr_dump_state.c",
+        "driver_trace/tr_screen.c",
+        "driver_trace/tr_texture.c",
+        "driver_trace/tr_video.c",
+        "hud/font.c",
+        "hud/hud_context.c",
+        "hud/hud_cpu.c",
+        "hud/hud_nic.c",
+        "hud/hud_cpufreq.c",
+        "hud/hud_diskstat.c",
+        "hud/hud_sensors_temp.c",
+        "hud/hud_driver_query.c",
+        "hud/hud_fps.c",
+        "indices/u_primconvert.c",
+        "pipebuffer/pb_buffer_fenced.c",
+        "pipebuffer/pb_bufmgr_cache.c",
+        "pipebuffer/pb_bufmgr_debug.c",
+        "pipebuffer/pb_bufmgr_mm.c",
+        "pipebuffer/pb_bufmgr_slab.c",
+        "pipebuffer/pb_cache.c",
+        "pipebuffer/pb_validate.c",
+        "postprocess/pp_celshade.c",
+        "postprocess/pp_colors.c",
+        "postprocess/pp_init.c",
+        "postprocess/pp_mlaa.c",
+        "postprocess/pp_program.c",
+        "postprocess/pp_run.c",
+        "rtasm/rtasm_execmem.c",
+        "rtasm/rtasm_x86sse.c",
+        "tgsi/tgsi_aa_point.c",
+        "tgsi/tgsi_build.c",
+        "tgsi/tgsi_dump.c",
+        "tgsi/tgsi_dynamic_indexing.c",
+        "tgsi/tgsi_exec.c",
+        "tgsi/tgsi_from_mesa.c",
+        "tgsi/tgsi_info.c",
+        "tgsi/tgsi_iterate.c",
+        "tgsi/tgsi_lowering.c",
+        "tgsi/tgsi_parse.c",
+        "tgsi/tgsi_point_sprite.c",
+        "tgsi/tgsi_sanity.c",
+        "tgsi/tgsi_scan.c",
+        "tgsi/tgsi_strings.c",
+        "tgsi/tgsi_text.c",
+        "tgsi/tgsi_transform.c",
+        "tgsi/tgsi_two_side.c",
+        "tgsi/tgsi_ureg.c",
+        "tgsi/tgsi_util.c",
+        "tgsi/tgsi_vpos.c",
+        "translate/translate.c",
+        "translate/translate_cache.c",
+        "translate/translate_generic.c",
+        "translate/translate_sse.c",
+        "util/u_async_debug.c",
+        "util/u_bitmask.c",
+        "util/u_blitter.c",
+        "util/u_debug_describe.c",
+        "util/u_debug_flush.c",
+        "util/u_debug_image.c",
+        "util/u_debug_refcnt.c",
+        "util/u_draw.c",
+        "util/u_draw_quad.c",
+        "util/u_driconf.c",
+        "util/u_dump_defines.c",
+        "util/u_dump_state.c",
+        "util/u_framebuffer.c",
+        "util/u_gen_mipmap.c",
+        "util/u_handle_table.c",
+        "util/u_helpers.c",
+        "util/u_index_modify.c",
+        "util/u_live_shader_cache.c",
+        "util/u_log.c",
+        "util/u_prim.c",
+        "util/u_prim_restart.c",
+        "util/u_pstipple.c",
+        "util/u_resource.c",
+        "util/u_sample_positions.c",
+        "util/u_sampler.c",
+        "util/u_screen.c",
+        "util/u_simple_shaders.c",
+        "util/u_split_draw.c",
+        "util/u_suballoc.c",
+        "util/u_surface.c",
+        "util/u_tests.c",
+        "util/u_texture.c",
+        "util/u_tile.c",
+        "util/u_transfer.c",
+        "util/u_transfer_helper.c",
+        "util/u_threaded_context.c",
+        "util/u_trace_gallium.c",
+        "util/u_upload_mgr.c",
+        "util/u_vbuf.c",
+        "util/u_vertex_state_cache.c",
+        "nir/tgsi_to_nir.c",
+        "nir/nir_to_tgsi.c",
+        "nir/nir_draw_helpers.c",
+        "renderonly/renderonly.c",
+        "gallivm/lp_bld_arit.c",
+        "gallivm/lp_bld_arit_overflow.c",
+        "gallivm/lp_bld_assert.c",
+        "gallivm/lp_bld_bitarit.c",
+        "gallivm/lp_bld_const.c",
+        "gallivm/lp_bld_conv.c",
+        "gallivm/lp_bld_coro.c",
+        "gallivm/lp_bld_debug.cpp",
+        "gallivm/lp_bld_flow.c",
+        "gallivm/lp_bld_format_aos_array.c",
+        "gallivm/lp_bld_format_aos.c",
+        "gallivm/lp_bld_format_float.c",
+        "gallivm/lp_bld_format_s3tc.c",
+        "gallivm/lp_bld_format.c",
+        "gallivm/lp_bld_format_soa.c",
+        "gallivm/lp_bld_format_srgb.c",
+        "gallivm/lp_bld_format_yuv.c",
+        "gallivm/lp_bld_gather.c",
+        "gallivm/lp_bld_init_common.c",
+        "gallivm/lp_bld_intr.c",
+        "gallivm/lp_bld_ir_common.c",
+        "gallivm/lp_bld_jit_sample.c",
+        "gallivm/lp_bld_jit_types.c",
+        "gallivm/lp_bld_logic.c",
+        "gallivm/lp_bld_misc.cpp",
+        "gallivm/lp_bld_nir.c",
+        "gallivm/lp_bld_nir_aos.c",
+        "gallivm/lp_bld_nir_soa.c",
+        "gallivm/lp_bld_pack.c",
+        "gallivm/lp_bld_passmgr.c",
+        "gallivm/lp_bld_printf.c",
+        "gallivm/lp_bld_quad.c",
+        "gallivm/lp_bld_sample_aos.c",
+        "gallivm/lp_bld_sample.c",
+        "gallivm/lp_bld_sample_soa.c",
+        "gallivm/lp_bld_struct.c",
+        "gallivm/lp_bld_swizzle.c",
+        "gallivm/lp_bld_tgsi_action.c",
+        "gallivm/lp_bld_tgsi.c",
+        "gallivm/lp_bld_tgsi_info.c",
+        "gallivm/lp_bld_tgsi_soa.c",
+        "gallivm/lp_bld_type.c",
+        "draw/draw_llvm.c",
+        "draw/draw_pt_fetch_shade_pipeline_llvm.c",
+        "draw/draw_vs_llvm.c",
+        "tessellator/tessellator.cpp",
+        "tessellator/p_tessellator.cpp",
+        "nir/nir_to_tgsi_info.c",
+        "gallivm/lp_bld_init.c",
+    ],
+    generated_headers: [
+        "tr_util.[ch]_header",
+        "u_tracepoints.h",
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    generated_sources: [
+        "tr_util.[ch]_impl",
+        "u_tracepoints.c",
+        "u_indices_gen.c",
+        "u_unfilled_gen.c",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "libdrm",
+        "libLLVM16_swiftshader",
+        "m",
+        "sensors",
+        "ws2_32",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_loader",
+        "inc_gallium",
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "galliumvl",
+    host_supported: false,
+    srcs: [
+        "vl/vl_codec.c",
+        "vl/vl_compositor.c",
+        "vl/vl_compositor_gfx.c",
+        "vl/vl_compositor_cs.c",
+        "vl/vl_csc.c",
+        "vl/vl_deint_filter.c",
+        "vl/vl_deint_filter_cs.c",
+        "vl/vl_mpeg12_bitstream.c",
+        "vl/vl_vertex_buffers.c",
+        "vl/vl_video_buffer.c",
+    ],
+    generated_headers: [
+        "nir_opcodes.h",
+        "nir_builder_opcodes.h",
+        "nir_intrinsics.h",
+        "nir_intrinsics_indices.h",
+        "ir_expression_operation.h",
+        "builtin_types.h",
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "nir",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+        "compiler",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_gallium",
+        "inc_src",
+        "inc_nir",
+        "inc_compiler",
+    ]
+    
+}
+
+cc_library_static {
+    name: "galliumvl_stub",
+    host_supported: false,
+    srcs: [
+        "vl/vl_stubs.c",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+        "_trial_msvc",
+        "_trial_msvc",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "m",
+        "libzstd",
+        "libdrm",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_gallium",
+        "inc_src",
+    ]
+    
+}
+
+cc_library_static {
+    name: "galliumvlwinsys",
+    host_supported: false,
+    srcs: [
+        "vl/vl_winsys_drm.c",
+    ],
+    generated_headers: [
+        "shader_stats.h",
+        "u_format_gen.h",
+    ],
+    c_std: "c11",
+    cpp_std: "c++17",
+    defaults: [
+        "mesa_c_project_args",
+        "mesa_cpp_project_args",
+    ],
+    static_libs: [
+        "libsync",
+        "mesa_util",
+        "blake3",
+        "mesa_util_c11",
+    ],
+    shared_libs: [
+        "libdrm",
+        "m",
+        "libzstd",
+        "libcutils",
+        "hwvulkan_headers",
+        "liblog",
+        "libnativewindow",
+    ],
+    header_libs: [
+        "inc_gallium",
+        "inc_loader",
+        "inc_src",
+    ]
+    
+}
+
