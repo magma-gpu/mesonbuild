@@ -237,7 +237,7 @@ class HermeticStaticLibrary:
             if isinstance(target, build.StaticLibrary):
                 self.static_libs.append(target.name)
             elif isinstance(target, build.SharedLibrary):
-                self.shared_libs(target.name)
+                self.shared_libs.append(target.name)
 
         for target in meson_sl.link_whole_targets:
             if isinstance(target, build.StaticLibrary):
