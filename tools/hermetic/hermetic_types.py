@@ -307,6 +307,8 @@ class HermeticCustomTarget:
                 self.srcs.append(src.fname)
             elif isinstance(src, (build.CustomTarget, build.CustomTargetIndex)):
                 self.srcs.extend(str(s) for s in src.get_outputs())
+            elif isinstance(src, (build.StaticLibrary)):
+                self.srcs.append(src.filename)
             else:
                 # TODO: handle all other possible types
                 raise MesonException(f'Type: {type(src)} not handled, exiting...')
@@ -338,6 +340,8 @@ class HermeticCustomTarget:
                         else:
                             if isinstance(src, (build.CustomTarget, build.CustomTargetIndex)):
                                 cmd_parts.append(('input', j, src.get_outputs()[0]))
+                            elif isinstance(src, (build.StaticLibrary)):
+                                cmd_parts.append(('input', j, src.filename))
                             else:
                                 cmd_parts.append(('input', j, src.fname))
                 elif part_str.startswith('@INPUT'):
@@ -351,6 +355,8 @@ class HermeticCustomTarget:
                     else:
                         if isinstance(src, (build.CustomTarget, build.CustomTargetIndex)):
                             cmd_parts.append(('input', index, src.get_outputs()[0]))
+                        elif isinstance(src, (build.StaticLibrary)):
+                            cmd_parts.append(('input', index, src.filename))
                         else:
                             cmd_parts.append(('input', index, src.fname))
                 elif part_str.startswith('@OUTPUT'):
