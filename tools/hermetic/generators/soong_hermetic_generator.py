@@ -8,6 +8,7 @@ from pathlib import Path
 from tools.hermetic.hermetic_state import HermeticState
 from tools.hermetic.virtual.virtual_project_info import VirtualProjectInfo
 from tools.hermetic.generators.generator import Generator
+from tools.hermetic.generators.jinja_hermetic_helpers import hermetic_textwrap
 from tools.hermetic.single_pass.single_pass_custom_target import SinglePassCustomTarget, SinglePassCmdPart, SinglePassCmdPartType
 from tools.hermetic.hermetic_state import (
     HermeticStaticLibrary,
@@ -61,6 +62,7 @@ class SoongHermeticGenerator(Generator):
     def __init__(self, output_dir: str, hermetic_state: HermeticState, project_info: VirtualProjectInfo):
         super().__init__('soong_hermetic', output_dir, hermetic_state, project_info)
         self.hermetic_state = hermetic_state
+        self.jinja_env.filters['hermetic_textwrap'] = hermetic_textwrap
 
     def generate(self):
         self.project_info.copyright.update({'year': datetime.date.today().year})
@@ -154,7 +156,7 @@ class SoongHermeticGenerator(Generator):
             if not subdir:
                 content += '\n' + license_string
             for i, target in enumerate(targets):
-                template_name = f'{type(target).__name__.replace("Hermetic", "").replace("Soong", "").lower()}.txt'
+                template_name = f'{type(target).__name__.replace('Hermetic', '').replace('Soong', '').lower()}.txt'
                 if isinstance(target, SoongCustomTarget):
                     template_name = "customtarget.txt"
                 try:

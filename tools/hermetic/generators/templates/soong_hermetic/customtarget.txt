@@ -20,6 +20,6 @@ genrule {
     "{{ tool }}",
   {%- endfor %}
   ],
-  cmd: "{{ target.cmd | wordwrap(80, wrapstring='" + 
+  cmd: "{{ target.cmd | hermetic_textwrap(80, wrapstring=' " + 
         "') }}",
 }
