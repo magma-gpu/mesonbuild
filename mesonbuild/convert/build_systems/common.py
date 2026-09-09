@@ -28,6 +28,7 @@ from mesonbuild.convert.instance.convert_instance_build_target import (
 )
 
 from mesonbuild.convert.build_systems.target import (
+    ConvertAttr,
     ConvertExecutable,
     ConvertTargetType,
     ConvertTarget,
@@ -95,6 +96,9 @@ class ConvertBackend:
         raise NotImplementedError
 
     def finish_current_config(self, state_tracker: ConvertStateTracker) -> None:
+        pass
+
+    def finish(self, state_tracker: ConvertStateTracker) -> None:
         pass
 
 
@@ -305,6 +309,15 @@ class ConvertStateTracker:
 
         all_select_instances.append(all_os_selects)
         all_select_instances.append(all_arch_selects)
+
+        for target in self.targets.values():
+            attr_node = target.attribute_nodes.get(ConvertAttr.SOONG_DEFAULTS)
+            if attr_node and attr_node.common_values:
+                for flag_name in attr_node.common_values:
+                    if flag_name in self.targets:
+                        self.targets[flag_name].seen_labels.update(target.seen_labels)
+
+        self.backend.finish(self)
 
         for target in self.targets.values():
             target.finish(all_select_instances, all_custom_defaults)
