@@ -102,6 +102,7 @@ SOONG_ATTR_MAP: T.Dict[ConvertAttr, str] = {
     ConvertAttr.SOONG_CPP_STD: 'cpp_std',
     ConvertAttr.SOONG_C_STD: 'c_std',
     ConvertAttr.SOONG_DEFAULTS: 'defaults',
+    ConvertAttr.SOONG_DEVICE_SUPPORTED: 'device_supported',
     ConvertAttr.SOONG_ENABLED: 'enabled',
     ConvertAttr.SOONG_GENERATED_HEADERS: 'generated_headers',
     ConvertAttr.SOONG_HEADER_LIBS: 'header_libs',
