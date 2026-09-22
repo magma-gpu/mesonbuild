@@ -94,6 +94,7 @@ class BazelBackend(ConvertBackend):
         os_select = self.get_os_info(platform, MachineChoice.HOST)
         arch_select = self.get_arch_info(platform, MachineChoice.HOST)
         label = {arch_select, os_select} | custom_instances
+        target.add_seen_label(label)
 
         target.get_attribute_node(ConvertAttr.BAZEL_FLAGS).add_conditional_values(
             label, instance.compile_args
@@ -110,6 +111,7 @@ class BazelBackend(ConvertBackend):
         os_select = self.get_os_info(platform, MachineChoice.HOST)
         arch_select = self.get_arch_info(platform, MachineChoice.HOST)
         label = {arch_select, os_select} | custom_instances
+        target.add_seen_label(label)
 
         target.get_attribute_node(ConvertAttr.INCLUDES).add_conditional_values(
             label, list(instance.paths)
@@ -121,6 +123,7 @@ class BazelBackend(ConvertBackend):
                               platform: HermeticPlatformInstance,
                               custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
         target.get_attribute_node(ConvertAttr.SRCS).add_conditional_values(
             label, list(instance.srcs)
         )
@@ -205,6 +208,7 @@ class BazelBackend(ConvertBackend):
         os_select = self.get_os_info(platform, instance.machine_choice)
         arch_select = self.get_arch_info(platform, instance.machine_choice)
         label = {arch_select, os_select} | custom_instances
+        target.add_seen_label(label)
 
         bazel_generated_flags: T.List[ConvertId] = []
         for generated_flag in instance.generated_flags.values():
