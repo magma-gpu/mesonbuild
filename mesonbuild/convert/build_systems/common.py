@@ -191,6 +191,7 @@ class ConvertStateTracker:
         self.current_platform: T.Optional[HermeticPlatformInstance] = None
         self.current_custom_select_instances: T.Optional[T.Set[SelectInstance]] = None
         self.all_platforms: T.Set[HermeticPlatformInstance] = set()
+        self.current_config_id: int = 0
         self.output_dir: str = ''
         self.project_dir: str = ''
         self.backend = backend
@@ -200,6 +201,7 @@ class ConvertStateTracker:
                            custom_select_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         self.current_platform = platform_info
         self.current_custom_select_instances = custom_select_instances
+        self.current_config_id += 1
 
         self.all_platforms.add(platform_info)
 
@@ -226,6 +228,7 @@ class ConvertStateTracker:
         platform, custom_selects = self.get_current_config()
         target = T.cast(ConvertFlag, self.targets[flag.name])
         target.platforms.add(platform)
+        target.current_config_id = self.current_config_id
         self.backend.add_flag_config(target, flag, platform, custom_selects)
 
     def add_include_directory(self, inc: ConvertInstanceIncludeDirectory) -> None:
@@ -235,6 +238,7 @@ class ConvertStateTracker:
         platform, custom_selects = self.get_current_config()
         target = T.cast(ConvertIncludeDirectory, self.targets[inc.name])
         target.platforms.add(platform)
+        target.current_config_id = self.current_config_id
         self.backend.add_include_dir_config(target, inc, platform, custom_selects)
 
     def add_file_group(self, grp: ConvertInstanceFileGroup) -> None:
@@ -243,6 +247,7 @@ class ConvertStateTracker:
         platform, custom_selects = self.get_current_config()
         target = T.cast(ConvertFileGroup, self.targets[grp.name])
         target.platforms.add(platform)
+        target.current_config_id = self.current_config_id
         self.backend.add_file_group_config(target, grp, platform, custom_selects)
 
     def add_custom_target(self, custom_target: ConvertInstanceCustomTarget) -> None:
@@ -268,6 +273,7 @@ class ConvertStateTracker:
 
         platform, custom_selects = self.get_current_config()
         target.platforms.add(platform)
+        target.current_config_id = self.current_config_id
         self.backend.add_build_target_config(target, instance, platform, custom_selects)
 
     def add_static_library(self, lib: ConvertInstanceStaticLibrary) -> None:
@@ -308,6 +314,11 @@ class ConvertStateTracker:
 
         all_select_instances.append(all_os_selects)
         all_select_instances.append(all_arch_selects)
+
+        for target in self.targets.values():
+            for flag_target in target.flags.values():
+                for label, config_ids in target.seen_label_configs.items():
+                    flag_target.seen_label_configs[label].update(config_ids)
 
         for target in self.targets.values():
             target.finish(all_select_instances, all_custom_defaults)
