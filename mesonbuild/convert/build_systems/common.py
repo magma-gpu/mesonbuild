@@ -28,6 +28,7 @@ from mesonbuild.convert.instance.convert_instance_build_target import (
 )
 
 from mesonbuild.convert.build_systems.target import (
+    ConvertAttr,
     ConvertExecutable,
     ConvertTargetType,
     ConvertTarget,
@@ -188,6 +189,7 @@ class ConvertStateTracker:
         self.current_platform: T.Optional[HermeticPlatformInstance] = None
         self.current_custom_select_instances: T.Optional[T.Set[SelectInstance]] = None
         self.all_platforms: T.Set[HermeticPlatformInstance] = set()
+        self.current_config_id: int = 0
         self.output_dir: str = ''
         self.project_dir: str = ''
         self.backend = backend
@@ -197,6 +199,7 @@ class ConvertStateTracker:
                            custom_select_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         self.current_platform = platform_info
         self.current_custom_select_instances = custom_select_instances
+        self.current_config_id += 1
 
         self.all_platforms.add(platform_info)
 
@@ -221,26 +224,26 @@ class ConvertStateTracker:
             self.targets[flag.name] = ConvertFlag(flag.name, flag.subdir, flag.language)
 
         platform, custom_selects = self.get_current_config()
-        self.backend.add_flag_config(
-            T.cast(ConvertFlag, self.targets[flag.name]), flag, platform, custom_selects
-        )
+        target = T.cast(ConvertFlag, self.targets[flag.name])
+        target.current_config_id = self.current_config_id
+        self.backend.add_flag_config(target, flag, platform, custom_selects)
 
     def add_include_directory(self, inc: ConvertInstanceIncludeDirectory) -> None:
         if inc.name not in self.targets:
             self.targets[inc.name] = ConvertIncludeDirectory(inc.name, inc.subdir)
 
         platform, custom_selects = self.get_current_config()
-        self.backend.add_include_dir_config(
-            T.cast(ConvertIncludeDirectory, self.targets[inc.name]), inc, platform, custom_selects
-        )
+        target = T.cast(ConvertIncludeDirectory, self.targets[inc.name])
+        target.current_config_id = self.current_config_id
+        self.backend.add_include_dir_config(target, inc, platform, custom_selects)
 
     def add_file_group(self, grp: ConvertInstanceFileGroup) -> None:
         if grp.name not in self.targets:
             self.targets[grp.name] = ConvertFileGroup(grp.name, grp.subdir)
         platform, custom_selects = self.get_current_config()
-        self.backend.add_file_group_config(
-            T.cast(ConvertFileGroup, self.targets[grp.name]), grp, platform, custom_selects
-        )
+        target = T.cast(ConvertFileGroup, self.targets[grp.name])
+        target.current_config_id = self.current_config_id
+        self.backend.add_file_group_config(target, grp, platform, custom_selects)
 
     def add_custom_target(self, custom_target: ConvertInstanceCustomTarget) -> None:
         self.backend.add_custom_target(self, custom_target)
@@ -260,25 +263,25 @@ class ConvertStateTracker:
             self.targets[lib.name] = ConvertStaticLibrary(lib.name, lib.subdir, lib.rust_abi)
 
         platform, custom_selects = self.get_current_config()
-        self.backend.add_build_target_config(
-            T.cast(ConvertStaticLibrary, self.targets[lib.name]), lib, platform, custom_selects
-        )
+        target = T.cast(ConvertStaticLibrary, self.targets[lib.name])
+        target.current_config_id = self.current_config_id
+        self.backend.add_build_target_config(target, lib, platform, custom_selects)
 
     def add_shared_library(self, lib: ConvertInstanceSharedLibrary) -> None:
         if lib.name not in self.targets:
             self.targets[lib.name] = ConvertSharedLibrary(lib.name, lib.subdir, lib.rust_abi)
         platform, custom_selects = self.get_current_config()
-        self.backend.add_build_target_config(
-            T.cast(ConvertSharedLibrary, self.targets[lib.name]), lib, platform, custom_selects
-        )
+        target = T.cast(ConvertSharedLibrary, self.targets[lib.name])
+        target.current_config_id = self.current_config_id
+        self.backend.add_build_target_config(target, lib, platform, custom_selects)
 
     def add_executable(self, exe: ConvertInstanceExecutable) -> None:
         if exe.name not in self.targets:
             self.targets[exe.name] = ConvertExecutable(exe.name, exe.subdir, exe.rust_abi)
         platform, custom_selects = self.get_current_config()
-        self.backend.add_build_target_config(
-            T.cast(ConvertExecutable, self.targets[exe.name]), exe, platform, custom_selects
-        )
+        target = T.cast(ConvertExecutable, self.targets[exe.name])
+        target.current_config_id = self.current_config_id
+        self.backend.add_build_target_config(target, exe, platform, custom_selects)
 
     def finish(self) -> None:
         all_os_selects: T.Set[SelectInstance] = set()
@@ -298,6 +301,15 @@ class ConvertStateTracker:
 
         all_select_instances.append(all_os_selects)
         all_select_instances.append(all_arch_selects)
+
+        for target in self.targets.values():
+            attr_node = target.attribute_nodes.get(ConvertAttr.SOONG_DEFAULTS)
+            if attr_node and attr_node.common_values:
+                for flag_name in attr_node.common_values:
+                    if flag_name in self.targets:
+                        flag_target = self.targets[flag_name]
+                        for label, config_ids in target.seen_label_configs.items():
+                            flag_target.seen_label_configs[label].update(config_ids)
 
         for target in self.targets.values():
             target.finish(all_select_instances, all_custom_defaults)

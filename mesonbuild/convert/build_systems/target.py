@@ -104,6 +104,11 @@ class ConvertAttrNode:
         self.grouped_select_instances: T.Dict[str, T.List[T.Set[SelectInstance]]] = defaultdict(
             list
         )
+        self.value_label_configs: T.Dict[str, T.Dict[T.FrozenSet[SelectInstance], T.Set[int]]] = defaultdict(
+            lambda: defaultdict(set)
+        )
+        self.current_config_id: int = 0
+        self.select_instance_groups: T.List[T.Set[SelectInstance]] = []
         self.all_select_instances: T.Dict[str, T.Set[SelectInstance]] = defaultdict(set)
         self.select_nodes: T.List[SelectNode] = []
 
@@ -116,13 +121,16 @@ class ConvertAttrNode:
 
     def add_conditional_values(self, label: T.Set[SelectInstance],
                                values: T.List[str]) -> None:  # fmt: skip
+        frozen_label = frozenset(label)
         for value in values:
             self.grouped_select_instances[value].append(label)
+            self.value_label_configs[value][frozen_label].add(self.current_config_id)
             for select_instance in label:
                 self.all_select_instances[value].add(select_instance)
 
     def consolidate_conditionals(self, select_instance_groups: T.List[T.Set[SelectInstance]],
-                                 all_custom_defaults: T.Set[SelectInstance]) -> None:  # fmt: skip
+                                 all_custom_defaults: T.Set[SelectInstance],
+                                 target_seen_label_configs: T.Dict[T.FrozenSet[SelectInstance], T.Set[int]]) -> None:  # fmt: skip
         """
         Simplifies and organizes conditional attribute values after all project
         configurations have been processed.
@@ -145,7 +153,11 @@ class ConvertAttrNode:
         `common_values` set. This process ensures that the final build file output is
         as clean and minimal as possible.
         """
+        self.select_instance_groups = select_instance_groups
         for value, labels_list in self.grouped_select_instances.items():
+            labels_set = {frozenset(l) for l in labels_list}
+            val_configs = self.value_label_configs[value]
+
             common_custom_instances: T.Optional[T.Set[SelectInstance]] = None
             for label in labels_list:
                 custom_instances = {
@@ -159,18 +171,45 @@ class ConvertAttrNode:
             processed_labels: T.List[T.Set[SelectInstance]] = []
             for label in labels_list:
                 current_label = label.copy()
-                # Remove any full group matches from the label
+                # Remove any full group matches from the label if sound across evaluated configs
                 for group in select_instance_groups:
                     if group.issubset(self.all_select_instances[value]):
-                        current_label -= group
+                        candidate = current_label - group
+                        if candidate == current_label:
+                            continue
+                        group_kind = next(iter(group)).select_id.select_kind
+                        if group_kind is SelectKind.OS and any(
+                            inst.select_id.select_kind is SelectKind.CUSTOM for inst in candidate
+                        ):
+                            continue
+                        if not target_seen_label_configs or all(
+                            seen_l in labels_set
+                            for seen_l in target_seen_label_configs
+                            if candidate.issubset(seen_l)
+                        ):
+                            current_label = candidate
 
-                # Remove common custom instances
+                # Remove common custom default instances only when doing so does not
+                # match an evaluated target configuration where this value is absent.
                 if common_custom_instances is not None:
                     for instance in common_custom_instances:
                         if instance in all_custom_defaults:
-                            current_label -= {instance}
+                            candidate = current_label - {instance}
+                            has_absent_match = any(
+                                seen_l not in labels_set
+                                for seen_l in target_seen_label_configs
+                                if candidate.issubset(seen_l)
+                            )
+                            has_consistent_source = any(
+                                val_configs.get(orig_l, set())
+                                == target_seen_label_configs.get(orig_l, set())
+                                for orig_l in labels_set
+                                if current_label.issubset(orig_l)
+                            )
+                            if not (has_absent_match and has_consistent_source):
+                                current_label = candidate
 
-                if current_label:
+                if current_label and current_label not in processed_labels:
                     processed_labels.append(current_label)
 
             if not processed_labels:
@@ -218,12 +257,35 @@ class ConvertAttrNode:
             return []
 
         for select_node in self.select_nodes:
-            default_strings: T.List[str] = ['default' for _ in select_node.select_ids]
+            default_strings: T.List[str] = ['default'] * len(select_node.select_ids)
 
-            select_node.select_tuples.append((default_strings, []))
+            tuples_to_add: T.List[T.Tuple[T.List[str], T.List[str]]] = []
+            for existing_values, _ in select_node.select_tuples:
+                for idx, (val, select_id) in enumerate(zip(existing_values, select_node.select_ids)):
+                    if val == 'default' and select_id.select_kind is SelectKind.CUSTOM:
+                        for group in self.select_instance_groups:
+                            group_select_ids = {inst.select_id for inst in group}
+                            if select_id in group_select_ids:
+                                for inst in group:
+                                    if inst.select_id == select_id and inst.value != 'default':
+                                        non_default_tuple = list(existing_values)
+                                        non_default_tuple[idx] = inst.value
+                                        tuples_to_add.append((non_default_tuple, []))
+
+            for new_tuple, empty_vals in tuples_to_add:
+                if not any(v == new_tuple for v, _ in select_node.select_tuples):
+                    select_node.select_tuples.append((new_tuple, empty_vals))
+
+            if not any(v == default_strings for v, _ in select_node.select_tuples):
+                select_node.select_tuples.append((default_strings, []))
 
             for values, attribute_values in select_node.select_tuples:
                 attribute_values.sort()
+
+            # Ensure specific branches are emitted before 'default' branches
+            select_node.select_tuples.sort(
+                key=lambda item: tuple(v == 'default' for v in item[0])
+            )
 
         return self.select_nodes
 
@@ -270,14 +332,21 @@ class ConvertTarget:
         self.subdir = subdir
         self.single_attributes: T.Dict[ConvertAttr, str] = {}
         self.attribute_nodes: T.Dict[ConvertAttr, ConvertAttrNode] = {}
+        self.seen_label_configs: T.Dict[T.FrozenSet[SelectInstance], T.Set[int]] = defaultdict(set)
+        self.current_config_id: int = 0
         self.single_attributes[ConvertAttr.NAME] = f'"{name}"'
         self.target_type = ConvertTargetType.UNKNOWN
+
+    def add_seen_label(self, label: T.Set[SelectInstance]) -> None:
+        self.seen_label_configs[frozenset(label)].add(self.current_config_id)
 
     def get_attribute_node(self, attribute: ConvertAttr) -> ConvertAttrNode:
         if attribute not in self.attribute_nodes:
             self.attribute_nodes[attribute] = ConvertAttrNode(attribute)
 
-        return self.attribute_nodes[attribute]
+        node = self.attribute_nodes[attribute]
+        node.current_config_id = self.current_config_id
+        return node
 
     def is_active_for_label(self, attribute: ConvertAttr,
                             label: T.Set[SelectInstance]) -> bool:  # fmt: skip
@@ -299,7 +368,9 @@ class ConvertTarget:
     def finish(self, all_select_instance_groups: T.List[T.Set[SelectInstance]],
                all_custom_defaults: T.Set[SelectInstance]) -> None:  # fmt: skip
         for node in self.attribute_nodes.values():
-            node.consolidate_conditionals(all_select_instance_groups, all_custom_defaults)
+            node.consolidate_conditionals(
+                all_select_instance_groups, all_custom_defaults, self.seen_label_configs
+            )
 
     def __lt__(self, other: ConvertTarget) -> bool:
         if self.target_type is not other.target_type:
