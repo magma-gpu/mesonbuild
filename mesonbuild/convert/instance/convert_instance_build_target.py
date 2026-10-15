@@ -98,6 +98,7 @@ class ConvertInstanceBuildTarget:
         self.proc_macros: T.List[ConvertId] = []
 
         self.srcs: T.List[ConvertId] = []
+        self.extra_include_dir_deps: T.List[ConvertId] = []
         self.rust_libs: T.List[ConvertId] = []
         self.static_libs: T.List[ConvertId] = []
         self.header_libs: T.List[ConvertId] = []
@@ -141,6 +142,7 @@ class ConvertInstanceBuildTarget:
         self._handle_sources(build_target, project_instance)
 
         self._handle_generated_sources(build_target, project_config)
+        self._handle_extra_include_dir_deps(project_config)
         self._handle_external_dependencies(build_target, project_config)
         self._handle_internal_dependencies(backend, build_target, project_config)
 
@@ -184,6 +186,10 @@ class ConvertInstanceBuildTarget:
             else:
                 if not file.fname.endswith('.h') and not file.fname.endswith('.hpp'):
                     self.srcs.append(ConvertId.from_local_file(file))
+
+    def _handle_extra_include_dir_deps(self, project_config: ConvertProjectConfig) -> None:
+        for dep in project_config.extra_include_dir_deps.get(self.name, []):
+            self.extra_include_dir_deps.append(ConvertId.from_local_name(dep, self.subdir))
 
     def _add_external_dep(self, d: dependency_base.ExternalDependency,
                           project_config: ConvertProjectConfig,

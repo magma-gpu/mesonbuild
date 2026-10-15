@@ -73,6 +73,7 @@ class ProjectConfigToml(T.TypedDict, total=False):
     project: ProjectSection
     copyright: CopyrightSection
     target_renames: T.Dict[str, str]
+    extra_include_dir_deps: T.Dict[str, T.List[str]]
     custom_target: CustomTargetSection
     soong_properties: SoongPropertiesSection
     custom_variable: T.List[CustomVariableSection]
@@ -117,6 +118,10 @@ class ConvertProjectConfig:
     @property
     def target_renames(self) -> T.Dict[str, str]:
         return self._toml_data.get('target_renames', {})
+
+    @property
+    def extra_include_dir_deps(self) -> T.Dict[str, T.List[str]]:
+        return self._toml_data.get('extra_include_dir_deps', {})
 
     @property
     def soong_properties(self) -> SoongPropertiesSection:

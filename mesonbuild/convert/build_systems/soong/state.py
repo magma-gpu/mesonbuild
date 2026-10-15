@@ -389,6 +389,9 @@ class SoongBackend(ConvertBackend):
             target.get_attribute_node(ConvertAttr.SRCS).add_conditional_values(
                 label, _get_soong_sources(instance.srcs + modified_gen_sources)
             )
+            target.get_attribute_node(
+                ConvertAttr.SOONG_EXTRA_INCLUDE_DIR_DEPS
+            ).add_conditional_values(label, _get_soong_sources(instance.extra_include_dir_deps))
             target.get_attribute_node(ConvertAttr.SOONG_STATIC_LIBRARIES).add_conditional_values(
                 label, _get_soong_targets(instance.static_libs)
             )
