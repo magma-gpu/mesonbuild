@@ -114,6 +114,7 @@ SOONG_ATTR_MAP: T.Dict[ConvertAttr, str] = {
     ConvertAttr.SOONG_SHARED_LIBRARIES: 'shared_libs',
     ConvertAttr.SOONG_SOURCE_STEM: 'source_stem',
     ConvertAttr.SOONG_STATIC_LIBRARIES: 'static_libs',
+    ConvertAttr.SOONG_STRICT_DEPS: 'strict_deps',
     ConvertAttr.SOONG_VENDOR: 'vendor',
     ConvertAttr.SOONG_VENDOR_AVAILABLE: 'vendor_available',
     ConvertAttr.SOONG_WHOLE_STATIC_LIBRARIES: 'whole_static_libs',

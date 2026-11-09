@@ -214,6 +214,9 @@ class ConvertInstanceCustomTarget:
             if isinstance(depend, build.CustomTarget):
                 target_name = self.project_config.sanitize_target_name(depend.name)
                 id_ = ConvertId(target_name, depend.subdir)
+                has_py_output = any(is_python_script(o) for o in depend.get_outputs())
+                if has_py_output and self.has_python_cmd and self.python_tool:
+                    self.project_instance.python_binaries[self.python_tool].strict_deps = False
                 if id_ not in self.command_list_srcs and id_ not in self.depend_srcs:
                     self.depend_srcs.append(id_)
             else:

@@ -127,6 +127,7 @@ class ConvertInstancePythonTarget:
         self.subdir = subdir
         self.srcs: T.Set[ConvertId] = set()
         self.libs: T.Set[ConvertId] = set()
+        self.strict_deps: bool = True
 
     def add_source(self, src: ConvertId) -> None:
         self.srcs.add(src)

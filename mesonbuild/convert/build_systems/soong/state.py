@@ -144,6 +144,8 @@ class SoongBackend(ConvertBackend):
     def add_python_binary_config(self, target: ConvertPythonBinary,
                                  instance: ConvertInstancePythonBinary) -> None:  # fmt: skip
         target.single_attributes[ConvertAttr.PYTHON_MAIN] = f'"{instance.main}"'
+        if not instance.strict_deps:
+            target.single_attributes[ConvertAttr.SOONG_STRICT_DEPS] = 'false'
         target.get_attribute_node(ConvertAttr.SRCS).add_common_values(
             _get_soong_sources(list(instance.srcs))
         )
