@@ -10,7 +10,7 @@ from mesonbuild.backend.nonebackend import NoneBackend
 from mesonbuild.interpreterbase import InterpreterObject
 from mesonbuild.interpreterbase.decorators import TypedArgs
 from mesonbuild.interpreter import Interpreter
-from mesonbuild.interpreter.interpreterobjects import RunProcess
+from mesonbuild.interpreter.interpreterobjects import RunProcess, extract_required_kwarg
 from mesonbuild.compilers import Compiler
 from mesonbuild.interpreterbase import Feature, noArgsFlattening
 from mesonbuild.mesonlib import File, MachineChoice, MesonException, ROOT_SUBPROJECT
@@ -149,6 +149,10 @@ class HermeticInterpreter(Interpreter):
             typed_kwargs = T.cast(dependency_base.DependencyObjectKWs, kwargs)
         else:
             typed_kwargs = kwargs
+
+        disabled, required, feature = extract_required_kwarg(kwargs, self.subproject)
+        if disabled:
+            return dependency_base.NotFoundDependency(desired_dep_name, self.environment)
 
         if desired_dep_name == 'threads':
             kwargs['native'] = MachineChoice.HOST
