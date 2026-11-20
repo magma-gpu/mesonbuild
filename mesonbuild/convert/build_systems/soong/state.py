@@ -157,6 +157,7 @@ class SoongBackend(ConvertBackend):
                         platform: HermeticPlatformInstance,
                         custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
         self._set_partition_type(target.single_attributes)
         if platform.is_native():
             target.single_attributes[ConvertAttr.SOONG_HOST_SUPPORTED] = 'true'
@@ -191,6 +192,7 @@ class SoongBackend(ConvertBackend):
                                platform: HermeticPlatformInstance,
                                custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
         self._set_partition_type(target.single_attributes)
         if platform.is_native():
             target.single_attributes[ConvertAttr.SOONG_HOST_SUPPORTED] = 'true'
@@ -205,6 +207,7 @@ class SoongBackend(ConvertBackend):
         # Soong doesn't support arch + OS mutators on filegroups
         # Soong team seems open to adding it, but who has the time?
         label = custom_instances
+        target.add_seen_label(label)
 
         # As a consequence of the above issue, we can't effectively fix the case where
         # the subdirectories of a filegroup instance vary. This can be solved in various
@@ -321,6 +324,7 @@ class SoongBackend(ConvertBackend):
                                 platform: HermeticPlatformInstance,
                                 custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
         if instance.install:
             target.soong_target_block |= SoongTargetBlock.ANDROID_INSTALL
         header_libs = list(instance.generated_include_dirs.keys()) + _get_soong_targets(
