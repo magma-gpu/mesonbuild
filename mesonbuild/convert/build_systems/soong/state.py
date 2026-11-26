@@ -199,6 +199,7 @@ class SoongBackend(ConvertBackend):
                         platform: HermeticPlatformInstance,
                         custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
 
         if instance.language == 'c':
             target.get_attribute_node(ConvertAttr.SOONG_CFLAGS).add_conditional_values(
@@ -226,6 +227,7 @@ class SoongBackend(ConvertBackend):
                                platform: HermeticPlatformInstance,
                                custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
 
         target.get_attribute_node(ConvertAttr.INCLUDES).add_conditional_values(
             label, list(instance.paths)
@@ -237,6 +239,7 @@ class SoongBackend(ConvertBackend):
         # Soong doesn't support arch + OS mutators on filegroups
         # Soong team seems open to adding it, but who has the time?
         label = custom_instances
+        target.add_seen_label(label)
 
         # As a consequence of the above issue, we can't effectively fix the case where
         # the subdirectories of a filegroup instance vary. This can be solved in various
@@ -350,6 +353,8 @@ class SoongBackend(ConvertBackend):
         target = T.cast(ConvertRustBindgen, state_tracker.targets[instance.target_name])
         platform, custom_instances = state_tracker.get_current_config()
         label = self.get_label(platform, custom_instances)
+        target.current_config_id = state_tracker.current_config_id
+        target.add_seen_label(label)
 
         target.single_attributes[ConvertAttr.RUST_CRATE_NAME] = f'"{instance.crate_name}"'
         if instance.rust_edition:
@@ -409,6 +414,7 @@ class SoongBackend(ConvertBackend):
                                 platform: HermeticPlatformInstance,
                                 custom_instances: T.Set[SelectInstance]) -> None:  # fmt: skip
         label = self.get_label(platform, custom_instances)
+        target.add_seen_label(label)
         if instance.install:
             target.soong_target_block |= SoongTargetBlock.ANDROID_INSTALL
         header_libs = list(instance.generated_include_dirs.keys()) + _get_soong_targets(
